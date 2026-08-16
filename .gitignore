@@ -1,0 +1,4 @@
+mcp_config.json
+node_modules/
+backend/*.db
+backend/*.sqlite
