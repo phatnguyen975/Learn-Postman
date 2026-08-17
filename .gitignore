@@ -2,3 +2,8 @@ mcp_config.json
 node_modules/
 backend/*.db
 backend/*.sqlite
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+ 

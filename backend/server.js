@@ -4,12 +4,85 @@ const bodyParser = require("body-parser");
 const db = require("./database");
 const jwt = require("jsonwebtoken");
 
+// --- BEGIN SWAGGER UI ---
+const swaggerUi = require("swagger-ui-express");
+const yaml = require("js-yaml");
+const fs = require("fs");
+const path = require("path");
+// --- END SWAGGER UI ---
+
 const app = express();
 const PORT = 3000;
 const SECRET_KEY = "super_secret_key_that_should_not_be_here";
 
+// --- BEGIN SWAGGER LOADER ---
+function loadOpenApiSpec() {
+  const baseSpecPath = path.join(__dirname, "../docs/openapi/openapi.yaml");
+  const pathsDir = path.join(__dirname, "../docs/openapi/paths");
+  const componentsDir = path.join(__dirname, "../docs/openapi/components");
+
+  // If the base spec file doesn't exist, return a minimal spec
+  if (!fs.existsSync(baseSpecPath)) {
+    return {
+      openapi: "3.0.3",
+      info: { title: "EShop API Docs", version: "1.0.0" },
+      paths: {},
+    };
+  }
+
+  const baseSpec = yaml.load(fs.readFileSync(baseSpecPath, "utf8"));
+  if (!baseSpec.paths) baseSpec.paths = {};
+  if (!baseSpec.components) baseSpec.components = {};
+
+  // Recursively load all .yaml/.yml files in a directory
+  function mergeYamlDir(dir) {
+    if (!fs.existsSync(dir)) return {};
+    let merged = {};
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const fullPath = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        Object.assign(merged, mergeYamlDir(fullPath));
+      } else if (entry.name.endsWith(".yaml") || entry.name.endsWith(".yml")) {
+        const content = yaml.load(fs.readFileSync(fullPath, "utf8"));
+        if (content) Object.assign(merged, content);
+      }
+    }
+    return merged;
+  }
+
+  // Merge paths
+  Object.assign(baseSpec.paths, mergeYamlDir(pathsDir));
+
+  // Merge components by type (schemas, responses, parameters, etc.)
+  const mergedComponents = mergeYamlDir(componentsDir);
+  for (const [key, value] of Object.entries(mergedComponents)) {
+    if (!baseSpec.components[key]) baseSpec.components[key] = {};
+    Object.assign(baseSpec.components[key], value);
+  }
+
+  return baseSpec;
+}
+// --- END SWAGGER LOADER ---
+
 app.use(cors());
 app.use(bodyParser.json());
+
+// --- BEGIN SWAGGER UI ROUTE ---
+try {
+  const swaggerSpec = loadOpenApiSpec();
+  app.use(
+    "/api-docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec, {
+      customSiteTitle: "EShop API Docs",
+      swaggerOptions: { persistAuthorization: true },
+    }),
+  );
+  console.log("Swagger UI available at http://localhost:3000/api-docs");
+} catch (err) {
+  console.warn("Swagger UI disabled:", err.message);
+}
+// --- END SWAGGER UI ROUTE ---
 
 const userCarts = {};
 
