@@ -35,7 +35,7 @@ See [`references/collection-structure.md`](references/collection-structure.md) f
 
 ## When NOT to Use
 
-- When the `test-cases.md` still has TCs marked INVALID or unresolved INCOMPLETE — fix the TCs first
+- When the `test-cases.md` still has TCs marked INVALID or unresolved INCOMPLETE in Final Status — fix the TCs first
 - When the task is to run the collection — that is handled separately
 - When only minor edits to an existing collection are needed — edit the JSON directly rather than regenerating
 
@@ -89,7 +89,7 @@ Validate all inputs per the rules above. Stop and ask the user to fix any invali
 
 ### Step 2 — TC and Contract Analysis
 
-1. Read `tc_file` — parse all TC rows by category (TC-FR, TC-ST, TC-SEC, TC-SCH, TC-ERR, TC-IDP, TC-RL)
+1. Read `tc_file` — parse all TC rows where `Final Status` is `VALID` by category (TC-FR, TC-ST, TC-SEC, TC-SCH, TC-ERR, TC-IDP, TC-RL)
 2. Classify each TC as data-driven or hardcoded (from the `Data-driven?` column)
 3. Identify dependencies: which TCs require a previous TC's response data (e.g., an ID from a create response)
 4. Read `contract_file` — identify:

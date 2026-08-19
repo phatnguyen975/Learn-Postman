@@ -76,15 +76,17 @@
 >
 > - **VALID** — TC is correct and ready for execution.
 > - **INVALID** — TC has incorrect expected result, wrong input, or tests a non-existent scenario. Must be corrected or removed.
-> - **INCOMPLETE** — TC is partially correct but missing information (precondition, input detail, expected result). Must be completed before execution.
+> - **INCOMPLETE** — TC is partially correct but missing information. Must be completed before execution.
+>
+> The Final Status column indicates the final decision after any fixes are applied. Only TCs with a Final Status of VALID will be used.
 
-| ID                      | Audit Status                 | Notes                 |
-| ----------------------- | ---------------------------- | --------------------- |
-| TC-{feature_id}-FR-001  | VALID / INVALID / INCOMPLETE | {Reason if not VALID} |
-| TC-{feature_id}-FR-002  |                              |                       |
-| TC-{feature_id}-ST-001  |                              |                       |
-| TC-{feature_id}-SEC-001 |                              |                       |
-| TC-{feature_id}-SCH-001 |                              |                       |
-| TC-{feature_id}-ERR-001 |                              |                       |
-| TC-{feature_id}-IDP-001 |                              |                       |
-| TC-{feature_id}-RL-001  |                              |                       |
+| ID                      | Audit Status                 | Notes (Original)      | Final Status | Notes (Fix)                |
+| ----------------------- | ---------------------------- | --------------------- | ------------ | -------------------------- |
+| TC-{feature_id}-FR-001  | VALID / INVALID / INCOMPLETE | {Reason if not VALID} | VALID        | {How it was fixed, if any} |
+| TC-{feature_id}-FR-002  |                              |                       |              |                            |
+| TC-{feature_id}-ST-001  |                              |                       |              |                            |
+| TC-{feature_id}-SEC-001 |                              |                       |              |                            |
+| TC-{feature_id}-SCH-001 |                              |                       |              |                            |
+| TC-{feature_id}-ERR-001 |                              |                       |              |                            |
+| TC-{feature_id}-IDP-001 |                              |                       |              |                            |
+| TC-{feature_id}-RL-001  |                              |                       |              |                            |
