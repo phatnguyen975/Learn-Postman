@@ -2,6 +2,7 @@ mcp_config.json
 node_modules/
 backend/*.db
 backend/*.sqlite
+postman/reports/
 .vscode/
 .idea/
 .DS_Store

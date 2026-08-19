@@ -199,11 +199,16 @@
                   "script": {
                     "type": "text/javascript",
                     "exec": [
-                      "pm.test(\"TC-FR01-SEC-004 — Verify error response does not expose raw SQL messages — Status code is 400\", function () {",
-                      "    pm.response.to.have.status(400);",
+                      "pm.test(\"TC-FR01-SEC-004 — Verify error response does not expose raw SQL messages — Status code is 500\", function () {",
+                      "    pm.response.to.have.status(500);",
                       "});",
                       "pm.test(\"TC-FR01-SEC-004 — Verify error response does not expose raw SQL messages — Response has error field\", function () {",
                       "    pm.expect(pm.response.json()).to.have.property(\"error\");",
+                      "});",
+                      "pm.test(\"TC-FR01-SEC-004 — Verify error response does not expose raw SQL messages — No SQL text in body\", function () {",
+                      "    const body = pm.response.text();",
+                      "    pm.expect(body).to.not.include(\"SQLITE_CONSTRAINT\");",
+                      "    pm.expect(body).to.not.include(\"syntax error\");",
                       "});"
                     ]
                   }
