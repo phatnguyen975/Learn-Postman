@@ -1,8 +1,8 @@
 # Bug Report: POST /api/register
 
-**Feature:** FR01 | **Endpoint:** `POST /api/register`  
-**Total Bugs:** 4 | **Generated:** 2026-08-20  
-**Status:** Approved
+> **Feature:** FR01 | **Endpoint:** `POST /api/register`  
+> **Total Bugs:** 4 | **Status:** Approved  
+> **Generated:** 2026-08-20
 
 ## BUG-FR01-001
 
@@ -12,7 +12,7 @@
 **Root Cause Category:** VALIDATION  
 **Status:** Open  
 **Related TCs:** TC-FR01-FR-004, TC-FR01-FR-005, TC-FR01-FR-006, TC-FR01-FR-008, TC-FR01-FR-009, TC-FR01-FR-010, TC-FR01-FR-012, TC-FR01-FR-014, TC-FR01-FR-016, TC-FR01-FR-017, TC-FR01-FR-018, TC-FR01-FR-019, TC-FR01-FR-020, TC-FR01-ERR-001, TC-FR01-ERR-002, TC-FR01-ERR-005, TC-FR01-ERR-006, TC-FR01-ERR-007, TC-FR01-ERR-008, TC-FR01-ERR-009, TC-FR01-ERR-010, TC-FR01-ERR-011, TC-FR01-SCH-005, TC-FR01-SCH-006  
-**GitHub Issue:** [#1]()
+**GitHub Issue:** [#1](https://github.com/phatnguyen975/Learn-Postman/issues/1)
 
 ### Description
 
@@ -128,7 +128,7 @@ The field constraints are:
 ```json
 {
   "message": "User registered successfully",
-  "id": 27
+  "id": 3
 }
 ```
 
@@ -137,7 +137,9 @@ The API accepts all invalid inputs and responds with a success message. No valid
 ### Evidence
 
 - **Newman Report:** `postman/reports/fr01-report.html`
-- **Screenshot:** _(Add screenshot before submitting to GitHub Issues)_
+- **Screenshot:**
+
+![BUG-FR01-001](../../screenshots/BUG-FR01-001.png)
 
 ### Impact
 
@@ -157,7 +159,7 @@ None.
 **Root Cause Category:** BUSINESS_LOGIC  
 **Status:** Open  
 **Related TCs:** TC-FR01-FR-021, TC-FR01-FR-022  
-**GitHub Issue:** [#2]()
+**GitHub Issue:** [#2](https://github.com/phatnguyen975/Learn-Postman/issues/2)
 
 ### Description
 
@@ -209,7 +211,7 @@ No new user record must be created.
 ```json
 {
   "message": "User registered successfully",
-  "id": 44
+  "id": 4
 }
 ```
 
@@ -218,7 +220,9 @@ A duplicate row is silently inserted. The different-case variant also succeeds w
 ### Evidence
 
 - **Newman Report:** `postman/reports/fr01-report.html`
-- **Screenshot:** _(Add screenshot before submitting to GitHub Issues)_
+- **Screenshot:**
+
+![BUG-FR01-002](../../screenshots/BUG-FR01-002.png)
 
 ### Impact
 
@@ -236,7 +240,7 @@ None.
 **Priority:** P1  
 **Root Cause Category:** SECURITY  
 **Status:** Open  
-**GitHub Issue:** [#3]()
+**GitHub Issue:** [#3](https://github.com/phatnguyen975/Learn-Postman/issues/3)
 
 ### Description
 
@@ -297,7 +301,9 @@ The plaintext password is stored verbatim.
 ### Evidence
 
 - **Newman Report:** `postman/reports/fr01-report.html`
-- **Screenshot:** _(Add screenshot of DB query result before submitting to GitHub Issues)_
+- **Screenshot:**
+
+![BUG-FR01-003](../../screenshots/BUG-FR01-003.png)
 
 ### Impact
 
@@ -317,7 +323,7 @@ None.
 **Root Cause Category:** SCHEMA  
 **Status:** Open  
 **Related TCs:** TC-FR01-ERR-003, TC-FR01-ERR-004  
-**GitHub Issue:** [#4]()
+**GitHub Issue:** [#4](https://github.com/phatnguyen975/Learn-Postman/issues/4)
 
 ### Description
 
@@ -403,7 +409,9 @@ Both responses expose internal stack traces and implementation details.
 ### Evidence
 
 - **Newman Report:** `postman/reports/fr01-report.html`
-- **Screenshot:** _(Add screenshot before submitting to GitHub Issues)_
+- **Screenshot:**
+
+![BUG-FR01-004](../../screenshots/BUG-FR01-004.png)
 
 ### Impact
 
