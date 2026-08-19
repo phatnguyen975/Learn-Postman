@@ -18,10 +18,7 @@ const SECRET_KEY = "super_secret_key_that_should_not_be_here";
 // --- BEGIN SWAGGER LOADER ---
 function loadOpenApiSpec() {
   const baseSpecPath = path.join(__dirname, "../docs/openapi/openapi.yaml");
-  const pathsDir = path.join(__dirname, "../docs/openapi/paths");
-  const componentsDir = path.join(__dirname, "../docs/openapi/components");
 
-  // If the base spec file doesn't exist, return a minimal spec
   if (!fs.existsSync(baseSpecPath)) {
     return {
       openapi: "3.0.3",
@@ -30,37 +27,33 @@ function loadOpenApiSpec() {
     };
   }
 
-  const baseSpec = yaml.load(fs.readFileSync(baseSpecPath, "utf8"));
-  if (!baseSpec.paths) baseSpec.paths = {};
-  if (!baseSpec.components) baseSpec.components = {};
-
-  // Recursively load all .yaml/.yml files in a directory
-  function mergeYamlDir(dir) {
-    if (!fs.existsSync(dir)) return {};
-    let merged = {};
-    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-      const fullPath = path.join(dir, entry.name);
-      if (entry.isDirectory()) {
-        Object.assign(merged, mergeYamlDir(fullPath));
-      } else if (entry.name.endsWith(".yaml") || entry.name.endsWith(".yml")) {
-        const content = yaml.load(fs.readFileSync(fullPath, "utf8"));
-        if (content) Object.assign(merged, content);
+  function resolveRefs(obj, currentDir) {
+    if (Array.isArray(obj)) {
+      for (let i = 0; i < obj.length; i++) {
+        obj[i] = resolveRefs(obj[i], currentDir);
+      }
+    } else if (obj !== null && typeof obj === "object") {
+      if (
+        obj.$ref &&
+        typeof obj.$ref === "string" &&
+        obj.$ref.startsWith(".")
+      ) {
+        const targetPath = path.resolve(currentDir, obj.$ref);
+        if (fs.existsSync(targetPath)) {
+          let content = yaml.load(fs.readFileSync(targetPath, "utf8"));
+          content = resolveRefs(content, path.dirname(targetPath));
+          return content;
+        }
+      }
+      for (const key of Object.keys(obj)) {
+        obj[key] = resolveRefs(obj[key], currentDir);
       }
     }
-    return merged;
+    return obj;
   }
 
-  // Merge paths
-  Object.assign(baseSpec.paths, mergeYamlDir(pathsDir));
-
-  // Merge components by type (schemas, responses, parameters, etc.)
-  const mergedComponents = mergeYamlDir(componentsDir);
-  for (const [key, value] of Object.entries(mergedComponents)) {
-    if (!baseSpec.components[key]) baseSpec.components[key] = {};
-    Object.assign(baseSpec.components[key], value);
-  }
-
-  return baseSpec;
+  const baseSpec = yaml.load(fs.readFileSync(baseSpecPath, "utf8"));
+  return resolveRefs(baseSpec, path.dirname(baseSpecPath));
 }
 // --- END SWAGGER LOADER ---
 
