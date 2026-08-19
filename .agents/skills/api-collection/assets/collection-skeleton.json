@@ -277,11 +277,7 @@
                 }
               }
             },
-            "url": {
-              "raw": "{{baseUrl}}/api/endpoint",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "endpoint"]
-            }
+            "url": "{{baseUrl}}/api/endpoint"
           },
           "event": [
             {

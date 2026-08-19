@@ -67,11 +67,7 @@
                     "value": "application/json"
                   }
                 ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/register",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "register"]
-                },
+                "url": "{{baseUrl}}/api/register",
                 "body": {
                   "mode": "raw",
                   "raw": "{\n  \"name\": \"SecTest\",\n  \"email\": \"sectest2@domain.com\",\n  \"password\": \"Password123!\"\n}"
@@ -108,11 +104,7 @@
                     "value": "application/json"
                   }
                 ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/register",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "register"]
-                },
+                "url": "{{baseUrl}}/api/register",
                 "body": {
                   "mode": "raw",
                   "raw": "{\n  \"name\": \"Sec Test\",\n  \"email\": \"' OR '1'='1\",\n  \"password\": \"Password123!\"\n}"
@@ -145,11 +137,7 @@
                     "value": "application/json"
                   }
                 ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/register",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "register"]
-                },
+                "url": "{{baseUrl}}/api/register",
                 "body": {
                   "mode": "raw",
                   "raw": "{\n  \"name\": \"'; SELECT * FROM users;--\",\n  \"email\": \"sqli2@domain.com\",\n  \"password\": \"Password123!\"\n}"
@@ -183,11 +171,7 @@
                     "value": "application/json"
                   }
                 ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/register",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "register"]
-                },
+                "url": "{{baseUrl}}/api/register",
                 "body": {
                   "mode": "raw",
                   "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"test@eshop.com\",\n  \"password\": \"Password123!\"\n}"
@@ -225,11 +209,7 @@
                     "value": "application/json"
                   }
                 ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/register",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "register"]
-                },
+                "url": "{{baseUrl}}/api/register",
                 "body": {
                   "mode": "raw",
                   "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"test@eshop.com\",\n  \"password\": \"Password123!\"\n}"
@@ -271,11 +251,7 @@
                     "value": "application/json"
                   }
                 ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/register",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "register"]
-                },
+                "url": "{{baseUrl}}/api/register",
                 "body": {
                   "mode": "raw",
                   "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"test-user-1@eshop.com\",\n  \"password\": \"Password123!\"\n}"
@@ -309,11 +285,7 @@
                     "value": "application/json"
                   }
                 ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/register",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "register"]
-                },
+                "url": "{{baseUrl}}/api/register",
                 "body": {
                   "mode": "raw",
                   "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"test-user-2@eshop.com\",\n  \"password\": \"Password123!\"\n}"
@@ -347,11 +319,7 @@
                     "value": "application/json"
                   }
                 ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/register",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "register"]
-                },
+                "url": "{{baseUrl}}/api/register",
                 "body": {
                   "mode": "raw",
                   "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"test-user-3@eshop.com\",\n  \"password\": \"Password123!\"\n}"
@@ -385,11 +353,7 @@
                     "value": "application/json"
                   }
                 ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/register",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "register"]
-                },
+                "url": "{{baseUrl}}/api/register",
                 "body": {
                   "mode": "raw",
                   "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"test-user-4@eshop.com\",\n  \"password\": \"Password123!\"\n}"
@@ -423,11 +387,7 @@
                     "value": "application/json"
                   }
                 ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/register",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "register"]
-                },
+                "url": "{{baseUrl}}/api/register",
                 "body": {
                   "mode": "raw",
                   "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"invalidemail\",\n  \"password\": \"Password123!\"\n}"
@@ -461,11 +421,7 @@
                     "value": "application/json"
                   }
                 ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/register",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "register"]
-                },
+                "url": "{{baseUrl}}/api/register",
                 "body": {
                   "mode": "raw",
                   "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"test@eshop.com\",\n  \"password\": \"Password123!\"\n}"
@@ -504,11 +460,7 @@
                     "value": "application/json"
                   }
                 ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/register",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "register"]
-                },
+                "url": "{{baseUrl}}/api/register",
                 "body": {
                   "mode": "raw",
                   "raw": "{}"
@@ -541,11 +493,7 @@
                     "value": "application/json"
                   }
                 ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/register",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "register"]
-                }
+                "url": "{{baseUrl}}/api/register"
               },
               "event": [
                 {
@@ -574,11 +522,7 @@
                     "value": "application/json"
                   }
                 ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/register",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "register"]
-                },
+                "url": "{{baseUrl}}/api/register",
                 "body": {
                   "mode": "raw",
                   "raw": "{ \"name\": \"Bad JSON\" "
@@ -611,11 +555,7 @@
                     "value": "text/plain"
                   }
                 ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/register",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "register"]
-                },
+                "url": "{{baseUrl}}/api/register",
                 "body": {
                   "mode": "raw",
                   "raw": "{\n  \"name\": \"Wrong Type\",\n  \"email\": \"wrong-type@domain.com\",\n  \"password\": \"Password123!\"\n}"
@@ -648,11 +588,7 @@
                     "value": "application/json"
                   }
                 ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/register",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "register"]
-                },
+                "url": "{{baseUrl}}/api/register",
                 "body": {
                   "mode": "raw",
                   "raw": "{\n  \"name\": 12345,\n  \"email\": \"int-name@domain.com\",\n  \"password\": \"Password123!\"\n}"
@@ -685,11 +621,7 @@
                     "value": "application/json"
                   }
                 ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/register",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "register"]
-                },
+                "url": "{{baseUrl}}/api/register",
                 "body": {
                   "mode": "raw",
                   "raw": "{\n  \"name\": \"Int Email\",\n  \"email\": 12345,\n  \"password\": \"Password123!\"\n}"
@@ -722,11 +654,7 @@
                     "value": "application/json"
                   }
                 ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/register",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "register"]
-                },
+                "url": "{{baseUrl}}/api/register",
                 "body": {
                   "mode": "raw",
                   "raw": "{\n  \"name\": \"Bool Pass\",\n  \"email\": \"bool-pass@domain.com\",\n  \"password\": true\n}"
@@ -759,11 +687,7 @@
                     "value": "application/json"
                   }
                 ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/register",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "register"]
-                },
+                "url": "{{baseUrl}}/api/register",
                 "body": {
                   "mode": "raw",
                   "raw": "{\n  \"email\": \"no-name@domain.com\",\n  \"password\": \"Password123!\"\n}"
@@ -796,11 +720,7 @@
                     "value": "application/json"
                   }
                 ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/register",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "register"]
-                },
+                "url": "{{baseUrl}}/api/register",
                 "body": {
                   "mode": "raw",
                   "raw": "{\n  \"name\": \"No Email\",\n  \"password\": \"Password123!\"\n}"
@@ -833,11 +753,7 @@
                     "value": "application/json"
                   }
                 ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/register",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "register"]
-                },
+                "url": "{{baseUrl}}/api/register",
                 "body": {
                   "mode": "raw",
                   "raw": "{\n  \"name\": \"No Pass\",\n  \"email\": \"no-pass@domain.com\"\n}"
@@ -870,11 +786,7 @@
                     "value": "application/json"
                   }
                 ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/register",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "register"]
-                },
+                "url": "{{baseUrl}}/api/register",
                 "body": {
                   "mode": "raw",
                   "raw": "{\n  \"name\": null,\n  \"email\": null,\n  \"password\": null\n}"
@@ -907,11 +819,7 @@
                     "value": "application/json"
                   }
                 ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/register",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["api", "register"]
-                },
+                "url": "{{baseUrl}}/api/register",
                 "body": {
                   "mode": "raw",
                   "raw": "{\n  \"name\": \"Extra\",\n  \"email\": \"extra@domain.com\",\n  \"password\": \"Password123!\",\n  \"extra\": \"val\"\n}"
@@ -951,11 +859,7 @@
                 "value": "application/json"
               }
             ],
-            "url": {
-              "raw": "{{baseUrl}}/api/register",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "register"]
-            },
+            "url": "{{baseUrl}}/api/register",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"{{name}}\",\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}"

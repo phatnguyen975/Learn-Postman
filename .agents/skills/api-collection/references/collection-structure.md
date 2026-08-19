@@ -139,11 +139,7 @@ Each TC maps to one request item inside its category folder:
         "raw": { "language": "json" }
       }
     },
-    "url": {
-      "raw": "{{baseUrl}}/api/register",
-      "host": ["{{baseUrl}}"],
-      "path": ["api", "register"]
-    }
+    "url": "{{baseUrl}}/api/register"
   }
 }
 ```

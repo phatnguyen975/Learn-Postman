@@ -1,9 +1,10 @@
 # Test Cases: POST /api/register
 
-**Feature:** FR01 | **Endpoint:** `POST /api/register`  
-**Total:** 45 TCs | **Data-driven eligible:** 22 TCs  
-**Contract:** `docs/apis/post-register/CONTRACT.md` | **OpenAPI:** `docs/openapi/paths/auth/register.yaml`  
-**Generated:** 2026-08-19
+> **Feature:** FR01 | **Endpoint:** `POST /api/register`  
+> **Contract:** `docs/apis/post-register/CONTRACT.md` | **OpenAPI:** `docs/openapi/paths/auth/register.yaml`  
+> **Total:** 45 TCs | **Data-driven eligible:** 22 TCs  
+> **Passed:** 14 | **Failed:** 31 | **Skipped:** 0  
+> **Generated:** 2026-08-19
 
 ## TC-FR — Functional / Domain Testing
 
