@@ -57,23 +57,15 @@ Newman's `--export-summary` flag produces a JSON file with this top-level struct
 }
 ```
 
-## TC ID Extraction from Request Name
+## TC ID Extraction from Request Name and Router Architecture Support
 
-Each execution item's `item.name` follows the convention:
+With the introduction of the Iteration Router Architecture, execution items fall into three categories:
 
-```
-TC-{feature_id}-{CATEGORY}-{number} — {TC Title}
-```
+1. **Static Requests:** `item.name` follows the convention: `TC-{feature_id}-{CATEGORY}-{number} — {TC Title}`. **Extraction rule:** Split on ` — `. The first segment is the TC ID.
+2. **Data-Driven Template:** `item.name` is exactly `"Data-Driven Template"`. In this case, the TC ID is dynamically generated in the assertions. **Extraction rule:** Look at the first assertion's `assertion` name (e.g., `"TC-FR01-FR-021 — Status code is 200"`). Split on ` — `. The first segment is the TC ID.
+3. **Router Dummy Request:** `item.name` is `"[Control] Iteration Router"`. **Extraction rule:** Ignore this request entirely. Do not flag it as unmapped, just skip it.
 
-**Extraction rule:** Split on `—` (space-dash-space). The first segment is the TC ID.
-
-```
-"TC-FR01-FR-001 — Register account with valid inputs"
-  → TC ID: "TC-FR01-FR-001"
-  → Title: "Register account with valid inputs"
-```
-
-If `item.name` does not match this pattern (no `—` separator, no `TC-` prefix): flag as unmapped. Do not attempt to infer the TC ID.
+If `item.name` does not match any of the above patterns: flag as unmapped. Do not attempt to infer the TC ID.
 
 ## Pass/Fail Determination per Execution
 

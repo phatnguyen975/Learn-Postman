@@ -34,38 +34,60 @@ This document defines the canonical JSON structure for a Postman collection gene
       }
     }
   ],
-  "item": [
-    {
-      "name": "TC-FR — Domain Testing",
-      "item": [],
-      "event": [
-        {
-          "listen": "prerequest",
-          "script": { "type": "text/javascript", "exec": [] }
-        },
-        {
-          "listen": "test",
-          "script": { "type": "text/javascript", "exec": [] }
-        }
-      ]
-    }
-  ]
+  "item": []
 }
 ```
 
-## Folder Structure (item array)
+## Folder Structure (item Array)
 
-Each TC category becomes one folder. Include only categories that have TCs (skip N/A categories):
+The collection utilizes the **Iteration Router Architecture** to segregate static execution from data-driven looping:
 
 ```json
 "item": [
-  { "name": "TC-FR — Domain Testing",      "item": [], "event": [...] },
-  { "name": "TC-ST — State Transition",    "item": [], "event": [...] },
-  { "name": "TC-SEC — Security Testing",   "item": [], "event": [...] },
-  { "name": "TC-SCH — Schema Validation",  "item": [], "event": [...] },
-  { "name": "TC-ERR — Error Handling",     "item": [], "event": [...] },
-  { "name": "TC-IDP — Idempotency",        "item": [], "event": [...] },
-  { "name": "TC-RL — Rate Limiting",       "item": [], "event": [...] }
+  {
+    "name": "[Control] Iteration Router",
+    "request": {
+      "method": "GET",
+      "header": [],
+      "url": {
+        "raw": "https://postman-echo.com/get",
+        "protocol": "https",
+        "host": ["postman-echo", "com"],
+        "path": ["get"]
+      }
+    },
+    "event": [
+      {
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "if (pm.info.iteration > 0) {",
+            "    postman.setNextRequest('Data-Driven Template');",
+            "}"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "Static TCs",
+    "item": [
+      { "name": "TC-FR", "item": [], "event": [...] },
+      { "name": "TC-ST", "item": [], "event": [...] },
+      { "name": "TC-SEC", "item": [], "event": [...] },
+      { "name": "TC-SCH", "item": [], "event": [...] },
+      { "name": "TC-ERR", "item": [], "event": [...] },
+      { "name": "TC-IDP", "item": [], "event": [...] },
+      { "name": "TC-RL", "item": [], "event": [...] }
+    ]
+  },
+  {
+    "name": "Data-Driven TCs",
+    "item": [
+      { "name": "Data-Driven Template", "request": {...}, "event": [...] }
+    ]
+  }
 ]
 ```
 

@@ -233,33 +233,39 @@ pm.test("Retry-After header is present", function () {
 
 ## Section 4 — Data-Driven Request Pattern
 
-For TCs marked `Data-driven: Yes`, replace literal values with `{{variable}}` placeholders:
+For TCs marked `Data-driven: Yes`, place them in the `Data-Driven Template` request. Replace literal values with `{{variable}}` placeholders:
 
 ```json
 {
   "body": {
     "mode": "raw",
-    "raw": "{\n  \"name\": \"{{name}}\",\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}"
+    "raw": "{
+      \"name\": \"{{name}}\",
+      \"email\": \"{{email}}\",
+      \"password\": \"{{password}}\"
+    }"
   }
 }
 ```
 
-Corresponding Test Script using data file variables:
+Corresponding Test Script using data file variables (`tc_id` and `expected_status` must be present in the CSV):
 
 ```javascript
-const expectedStatus = parseInt(pm.iterationData.get("expected_status"));
+const tc_id = pm.iterationData.get("tc_id");
+const expectedStatus = parseInt(pm.iterationData.get("expected_status"), 10);
 const expectedMessage = pm.iterationData.get("expected_message");
 
-pm.test("Status matches expected for this partition", function () {
-  pm.response.to.have.status(expectedStatus);
-});
+pm.test(
+  tc_id + " — Status matches expected (" + expectedStatus + ")",
+  function () {
+    pm.response.to.have.status(expectedStatus);
+  },
+);
 
 if (expectedMessage) {
-  pm.test("Response message matches", function () {
+  pm.test(tc_id + " — Response message matches", function () {
     const body = pm.response.json();
     pm.expect(body.message || body.error).to.equal(expectedMessage);
   });
 }
 ```
-
-**Note:** Use `pm.iterationData.get("key")` to read values from the CSV/JSON data file during Collection Runner or Newman `--iteration-data` execution. This is different from `pm.environment.get()` which reads from the environment.

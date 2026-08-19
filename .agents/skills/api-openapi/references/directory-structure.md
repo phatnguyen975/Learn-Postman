@@ -200,21 +200,21 @@ post: # or get, put, patch, delete
                 type: integer
                 example: 1
     "400":
-      $ref: "../../../components/responses/BadRequest.yaml"
+      $ref: "../../components/responses/BadRequest.yaml"
     "409":
       description: "Email already registered"
       content:
         application/json:
           schema:
-            $ref: "../../../components/schemas/ErrorResponse.yaml"
+            $ref: "../../components/schemas/ErrorResponse.yaml"
           example:
             error: "Email already exists"
     "422":
-      $ref: "../../../components/responses/UnprocessableEntity.yaml"
+      $ref: "../../components/responses/UnprocessableEntity.yaml"
     "429":
-      $ref: "../../../components/responses/TooManyRequests.yaml"
+      $ref: "../../components/responses/TooManyRequests.yaml"
     "500":
-      $ref: "../../../components/responses/InternalServerError.yaml"
+      $ref: "../../components/responses/InternalServerError.yaml"
 ```
 
 ### Component Files

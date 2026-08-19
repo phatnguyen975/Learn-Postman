@@ -63,7 +63,7 @@ See [`references/summary-parsing.md`](references/summary-parsing.md) for details
 
 1. **Delegate execution, own the result.** This skill is the orchestrator. `newman-executor` handles CLI execution. This skill handles everything before and after: validation, parsing, TC file update, human gate.
 2. **Never modify `collection.json`.** If the collection produces unexpected results, report them — do not silently fix the collection.
-3. **TC name is the mapping key.** Newman reports results by request name. Each request must be named exactly `TC-{feature_id}-{CATEGORY}-{number} — {title}` for mapping to work. If a request name does not match a TC ID, flag it rather than guessing.
+3. **TC name is the mapping key.** Newman reports results by request name. For static requests, the name must be `TC-{feature_id}-{CATEGORY}-{number} — {title}`. For the `Data-Driven Template` request, the TC ID is extracted dynamically from its test assertion names. If a request/assertion cannot be mapped to a TC ID, flag it rather than guessing.
 4. **Every TC gets a result.** After parsing, every TC row in `tc_file` must have an entry in Status and Actual Result — either from the Newman run or marked `SKIPPED` with a reason.
 5. **Human gate is non-negotiable.** The human must confirm which FAILs are real bugs, which are script errors, and which are environment issues before this skill's task is complete.
 
@@ -102,8 +102,8 @@ If `newman-executor` reports an execution error (Newman not found, collection JS
 Read `{summary_dir}/newman-summary.json`. Follow the parsing logic in [`references/summary-parsing.md`](references/summary-parsing.md) to:
 
 - Extract per-request results: pass/fail, response status code, response body excerpt
-- Map each result to its TC ID using the request name
-- Identify any requests whose names do not match a TC ID in `tc_file` — flag these
+- Map each result to its TC ID (via request name for static requests, or via assertion name for the Data-Driven Template)
+- Identify any requests whose names or assertions do not match a TC ID in `tc_file` — flag these
 
 ### Step 5 — Update `tc_file`
 
@@ -147,7 +147,7 @@ Run before presenting to the user. Every item must pass:
 ## Anti-Patterns
 
 - **Modifying `collection.json` to fix failures.** If assertions fail, report it — do not silently update the collection.
-- **Guessing TC mapping when request names don't match.** Flag unmapped requests explicitly. Do not infer which TC a request corresponds to based on similarity.
+- **Guessing TC mapping when names don't match.** Flag unmapped requests explicitly. Do not infer which TC a request corresponds to based on similarity.
 - **Writing vague Actual Results.** "Request failed" is not acceptable. Write the HTTP status code and a summary of the response body.
 - **Marking all FAILs as bugs without human review.** A FAIL may be caused by a script error or a down server — the human gate exists to distinguish these cases.
 - **Skipping pre-flight checks.** Running Newman against an unreachable server produces misleading results. Flag connectivity issues before execution.

@@ -67,122 +67,238 @@
   ],
   "item": [
     {
-      "name": "TC-FR — Domain Testing",
-      "description": "Functional and domain partition test cases. Run with --iteration-data data-domain.csv for data-driven execution.",
-      "item": [],
+      "name": "[Control] Iteration Router",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "https://postman-echo.com/get",
+          "protocol": "https",
+          "host": ["postman-echo", "com"],
+          "path": ["get"]
+        }
+      },
       "event": [
-        {
-          "listen": "prerequest",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              "// Folder-level setup: create prerequisite data if needed.",
-              "// Use pm.sendRequest() — do not add setup as a visible request item.",
-              "// Store created IDs with pm.environment.set('varName', id).",
-              "// Remove this block if no prerequisite data is required."
-            ]
-          }
-        },
         {
           "listen": "test",
           "script": {
             "type": "text/javascript",
             "exec": [
-              "// Folder-level teardown: delete prerequisite data if a delete endpoint is documented.",
-              "// Always call pm.environment.unset('varName') for every variable set in setup.",
-              "// Remove this block if no teardown is required."
+              "// This router skips the static folder in subsequent iterations",
+              "if (pm.info.iteration > 0) {",
+              "    postman.setNextRequest('Data-Driven Template');",
+              "}"
             ]
           }
         }
       ]
     },
     {
-      "name": "TC-ST — State Transition",
-      "description": "State transition test cases. Requests within this folder may be ordered and chained.",
-      "item": [],
-      "event": [
+      "name": "Static TCs",
+      "description": "Folder containing all hardcoded test cases. Executed exactly once.",
+      "item": [
         {
-          "listen": "prerequest",
-          "script": { "type": "text/javascript", "exec": [] }
+          "name": "TC-FR",
+          "description": "Functional and domain partition test cases. Run with --iteration-data data-domain.csv for data-driven execution.",
+          "item": [],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Folder-level setup: create prerequisite data if needed.",
+                  "// Use pm.sendRequest() — do not add setup as a visible request item.",
+                  "// Store created IDs with pm.environment.set('varName', id).",
+                  "// Remove this block if no prerequisite data is required."
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Folder-level teardown: delete prerequisite data if a delete endpoint is documented.",
+                  "// Always call pm.environment.unset('varName') for every variable set in setup.",
+                  "// Remove this block if no teardown is required."
+                ]
+              }
+            }
+          ]
         },
         {
-          "listen": "test",
-          "script": { "type": "text/javascript", "exec": [] }
+          "name": "TC-ST",
+          "description": "State transition test cases. Requests within this folder may be ordered and chained.",
+          "item": [],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": []
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": []
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC-SEC",
+          "description": "Security test cases covering OWASP API Security Top 10 vectors.",
+          "item": [],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": []
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": []
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC-SCH",
+          "description": "Response schema validation test cases.",
+          "item": [],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": []
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": []
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC-ERR",
+          "description": "Error handling test cases for malformed and missing input scenarios.",
+          "item": [],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": []
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": []
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC-IDP",
+          "description": "Idempotency test cases. Only include if contract specifies idempotency rules.",
+          "item": [],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": []
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": []
+              }
+            }
+          ]
+        },
+        {
+          "name": "TC-RL",
+          "description": "Rate limiting test cases. Only include if contract specifies rate limiting rules.",
+          "item": [],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": []
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": []
+              }
+            }
+          ]
         }
       ]
     },
     {
-      "name": "TC-SEC — Security Testing",
-      "description": "Security test cases covering OWASP API Security Top 10 vectors.",
-      "item": [],
-      "event": [
+      "name": "Data-Driven TCs",
+      "description": "Folder containing the Template Request. Run with --iteration-data data-domain.csv.",
+      "item": [
         {
-          "listen": "prerequest",
-          "script": { "type": "text/javascript", "exec": [] }
-        },
-        {
-          "listen": "test",
-          "script": { "type": "text/javascript", "exec": [] }
-        }
-      ]
-    },
-    {
-      "name": "TC-SCH — Schema Validation",
-      "description": "Response schema validation test cases.",
-      "item": [],
-      "event": [
-        {
-          "listen": "prerequest",
-          "script": { "type": "text/javascript", "exec": [] }
-        },
-        {
-          "listen": "test",
-          "script": { "type": "text/javascript", "exec": [] }
-        }
-      ]
-    },
-    {
-      "name": "TC-ERR — Error Handling",
-      "description": "Error handling test cases for malformed and missing input scenarios.",
-      "item": [],
-      "event": [
-        {
-          "listen": "prerequest",
-          "script": { "type": "text/javascript", "exec": [] }
-        },
-        {
-          "listen": "test",
-          "script": { "type": "text/javascript", "exec": [] }
-        }
-      ]
-    },
-    {
-      "name": "TC-IDP — Idempotency",
-      "description": "Idempotency test cases. Only include if contract specifies idempotency rules.",
-      "item": [],
-      "event": [
-        {
-          "listen": "prerequest",
-          "script": { "type": "text/javascript", "exec": [] }
-        },
-        {
-          "listen": "test",
-          "script": { "type": "text/javascript", "exec": [] }
-        }
-      ]
-    },
-    {
-      "name": "TC-RL — Rate Limiting",
-      "description": "Rate limiting test cases. Only include if contract specifies rate limiting rules.",
-      "item": [],
-      "event": [
-        {
-          "listen": "prerequest",
-          "script": { "type": "text/javascript", "exec": [] }
-        },
-        {
-          "listen": "test",
-          "script": { "type": "text/javascript", "exec": [] }
+          "name": "Data-Driven Template",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"field\": \"{{variable}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/endpoint",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "endpoint"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const tc_id = pm.iterationData.get('tc_id');",
+                  "const expectedStatus = parseInt(pm.iterationData.get('expected_status'));",
+                  "",
+                  "pm.test(tc_id + ' — Status is ' + expectedStatus, function () {",
+                  "    pm.response.to.have.status(expectedStatus);",
+                  "});"
+                ]
+              }
+            }
+          ]
         }
       ]
     }

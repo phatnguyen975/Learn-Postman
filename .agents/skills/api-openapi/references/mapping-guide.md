@@ -148,7 +148,7 @@ When an error response has a unique body or message specific to this endpoint, d
   content:
     application/json:
       schema:
-        $ref: "../../../components/schemas/ErrorResponse.yaml"
+        $ref: "../../components/schemas/ErrorResponse.yaml"
       example:
         error: "Email already exists"
 ```

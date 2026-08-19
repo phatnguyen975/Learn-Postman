@@ -97,13 +97,17 @@ Validate all inputs per the rules above. Stop and ask the user to fix any invali
    - Prerequisite resources needed before test execution (e.g., existing product for cart tests)
    - Available delete/cleanup endpoints for teardown
 
-### Step 3 — Collection Skeleton
+### Step 3 — Collection Skeleton & Iteration Router Architecture
 
-Create the base `collection.json` structure with:
+To prevent Postman from multiplying static requests by the number of CSV rows (e.g., 64 requests × 23 rows = 1472 executions), you MUST implement the **Iteration Router Architecture**:
 
-- Collection name: `{feature_id} — {METHOD} {PATH}`
-- Collection-level variables: `{{baseUrl}}` and any other dynamic variables
-- Folder structure matching TC categories present in `tc_file` (omit folders for N/A sections)
+1. Create a dummy request `[Control] Iteration Router` as the **first request** in the collection (not inside any folder).
+   - Method: GET, URL: `https://postman-echo.com/get`
+   - Test Script: `if (pm.info.iteration > 0) { postman.setNextRequest("Data-Driven Template"); }`
+2. Create `Folder 1: Static TCs` containing subfolders for each category (`TC-FR`, `TC-ST`, etc.). Place all non-data-driven requests here (hardcoded bodies).
+3. Create `Folder 2: Data-Driven TCs` containing **exactly one request** named `Data-Driven Template`.
+   - Body uses `{{variable}}` placeholders.
+   - Test script must dynamically assert the status code and extract `tc_id` from `pm.iterationData.get("tc_id")`.
 
 ### Step 4 — Collection-Level Pre-request Script
 
@@ -173,7 +177,8 @@ Do not proceed until the user explicitly confirms.
 
 Run before delivering output. Every item must pass:
 
-- [ ] One request exists per TC — no TC skipped, no extra requests added
+- [ ] The collection uses the Iteration Router Architecture to separate Static TCs from the Data-Driven Template
+- [ ] The Data-Driven Template uses dynamic Test Scripts reading `tc_id` and `expected_status` from iteration data
 - [ ] Collection-level Pre-request Script handles auth and custom header injection
 - [ ] Every folder with prerequisite needs has a Folder Pre-request Script
 - [ ] Every Folder Pre-request Script has a matching teardown in Folder Test Script
@@ -188,7 +193,7 @@ Run before delivering output. Every item must pass:
 
 ## Anti-Patterns
 
-- **Adding requests not in test-cases.md.** The collection is a direct translation of the TC suite. Do not add exploratory requests or extras.
+- **Adding requests not in test-cases.md.** The ONLY exception is the `[Control] Iteration Router` required for workflow routing. Do not add exploratory requests.
 - **Creating setup as standalone requests.** Setup calls (login, create prerequisite) belong in Pre-request Scripts using `pm.sendRequest()`, not as visible requests in the collection.
 - **Writing teardown for undocumented endpoints.** If the contract does not document a DELETE endpoint, do not call one in teardown.
 - **Hardcoding values in data-driven requests.** Any TC marked `Data-driven: Yes` must use `{{variable}}` — never a literal value in the request body.
@@ -211,13 +216,13 @@ Run before delivering output. Every item must pass:
 Verify before closing the task:
 
 - [ ] All inputs validated before any file was created
-- [ ] Every TC in `tc_file` is represented by exactly one request in the collection
+- [ ] The collection uses the Iteration Router architecture to efficiently map TCs without iteration multiplication
 - [ ] Contract was analyzed for auth requirements, prerequisites, and available delete endpoints
 - [ ] Setup/teardown is present only for folders that need it and only uses documented endpoints
 - [ ] Collection Completeness Checklist passed with zero unchecked items
 - [ ] `local.json` was merged — not replaced
 - [ ] Human gate was presented and explicit confirmation requested
-- [ ] No request was added that does not correspond to a TC
+- [ ] The only extra request allowed is the `[Control] Iteration Router`
 
 ## Common Rationalizations to Reject
 
