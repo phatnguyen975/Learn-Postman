@@ -50,7 +50,7 @@
           "listen": "test",
           "script": {
             "exec": [
-              "if (pm.info.iteration > 0) { postman.setNextRequest('Data-Driven TCs'); }"
+              "if (pm.info.iteration > 0) { postman.setNextRequest('Data-Driven Template'); }"
             ]
           }
         }
@@ -137,7 +137,7 @@
               "name": "TC-FR07-ST-002 Add duplicate",
               "item": [
                 {
-                  "name": "Step 1: First Add (qty 1)",
+                  "name": "TC-FR07-ST-002 Step 1: First Add (qty 1)",
                   "request": {
                     "method": "POST",
                     "header": [
@@ -202,7 +202,7 @@
                   ]
                 },
                 {
-                  "name": "Step 2: Second Add (qty 2)",
+                  "name": "TC-FR07-ST-002 Step 2: Second Add (qty 2)",
                   "request": {
                     "method": "POST",
                     "header": [
@@ -235,7 +235,7 @@
                   ]
                 },
                 {
-                  "name": "Step 3: Verify Cart Aggregation",
+                  "name": "TC-FR07-ST-002 Step 3: Verify Cart Aggregation",
                   "request": {
                     "method": "GET",
                     "header": [
@@ -259,7 +259,7 @@
                           "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
                           "pm.test('Quantity is aggregated to 3', function() {",
                           "    var cart = pm.response.json();",
-                          "    var item = cart.find(i => i.id === pm.variables.get('productId'));",
+                          "    var item = cart.find(i => i && i.id === pm.variables.get('productId'));",
                           "    pm.expect(item).to.not.be.undefined;",
                           "    pm.expect(item.quantity).to.eql(3);",
                           "});",
@@ -618,7 +618,7 @@
               "name": "TC-FR07-ST-008 Verify cart items do not persist",
               "item": [
                 {
-                  "name": "Step 1: Add item",
+                  "name": "TC-FR07-ST-008 Step 1: Add item",
                   "request": {
                     "method": "POST",
                     "header": [
@@ -683,7 +683,7 @@
                   ]
                 },
                 {
-                  "name": "Step 2: Get cart (Fails if server not restarted)",
+                  "name": "TC-FR07-ST-008 Step 2: Get cart (Fails if server not restarted)",
                   "request": {
                     "method": "GET",
                     "header": [
@@ -999,7 +999,7 @@
               "name": "TC-FR07-SEC-005 IDOR injection",
               "item": [
                 {
-                  "name": "TC-FR07-SEC-005 IDOR injection",
+                  "name": "TC-FR07-SEC-005 Step 1: POST",
                   "request": {
                     "method": "POST",
                     "header": [
@@ -1019,17 +1019,6 @@
                     }
                   },
                   "event": [
-                    {
-                      "listen": "test",
-                      "script": {
-                        "type": "text/javascript",
-                        "exec": [
-                          "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
-                          "pm.test('Message is Added to cart', function() { pm.expect(pm.response.json().message).to.eql('Added to cart'); });",
-                          "pm.variables.unset('productId');"
-                        ]
-                      }
-                    },
                     {
                       "listen": "prerequest",
                       "script": {
@@ -1061,6 +1050,51 @@
                           "});"
                         ]
                       }
+                    },
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                          "pm.test('Message is Added to cart', function() { pm.expect(pm.response.json().message).to.eql('Added to cart'); });"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "name": "TC-FR07-SEC-005 Step 2: GET Verify",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{userToken}}"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": "{{baseUrl}}/api/cart"
+                  },
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                          "pm.test('TC-FR07-SEC-005 — Payload validation', function() {",
+                          "    var cart = pm.response.json();",
+                          "    var item = cart.find(i => i && i.id === pm.variables.get('productId'));",
+                          "    pm.expect(item).to.not.be.undefined;",
+                          "    pm.expect(item.userId).to.not.eql(999);",
+                          "});",
+                          "pm.variables.unset('productId');"
+                        ]
+                      }
                     }
                   ]
                 }
@@ -1070,7 +1104,7 @@
               "name": "TC-FR07-SEC-006 IDOR via token reuse",
               "item": [
                 {
-                  "name": "Step 1: Reuse token",
+                  "name": "TC-FR07-SEC-006 Step 1: Reuse token",
                   "request": {
                     "method": "POST",
                     "header": [
@@ -1160,7 +1194,7 @@
               "name": "TC-FR07-SEC-007 Mass assignment role",
               "item": [
                 {
-                  "name": "TC-FR07-SEC-007 Mass assignment role",
+                  "name": "TC-FR07-SEC-007 Step 1: POST",
                   "request": {
                     "method": "POST",
                     "header": [
@@ -1180,17 +1214,6 @@
                     }
                   },
                   "event": [
-                    {
-                      "listen": "test",
-                      "script": {
-                        "type": "text/javascript",
-                        "exec": [
-                          "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
-                          "pm.test('Message is Added to cart', function() { pm.expect(pm.response.json().message).to.eql('Added to cart'); });",
-                          "pm.variables.unset('productId');"
-                        ]
-                      }
-                    },
                     {
                       "listen": "prerequest",
                       "script": {
@@ -1222,6 +1245,51 @@
                           "});"
                         ]
                       }
+                    },
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                          "pm.test('Message is Added to cart', function() { pm.expect(pm.response.json().message).to.eql('Added to cart'); });"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "name": "TC-FR07-SEC-007 Step 2: GET Verify",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{userToken}}"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": "{{baseUrl}}/api/cart"
+                  },
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                          "pm.test('TC-FR07-SEC-007 — Payload validation', function() {",
+                          "    var cart = pm.response.json();",
+                          "    var item = cart.find(i => i && i.id === pm.variables.get('productId'));",
+                          "    pm.expect(item).to.not.be.undefined;",
+                          "    pm.expect(item.role).to.be.undefined; pm.expect(item.isAdmin).to.be.undefined;",
+                          "});",
+                          "pm.variables.unset('productId');"
+                        ]
+                      }
                     }
                   ]
                 }
@@ -1231,7 +1299,7 @@
               "name": "TC-FR07-SEC-008 Mass assignment userId",
               "item": [
                 {
-                  "name": "TC-FR07-SEC-008 Mass assignment userId",
+                  "name": "TC-FR07-SEC-008 Step 1: POST",
                   "request": {
                     "method": "POST",
                     "header": [
@@ -1251,17 +1319,6 @@
                     }
                   },
                   "event": [
-                    {
-                      "listen": "test",
-                      "script": {
-                        "type": "text/javascript",
-                        "exec": [
-                          "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
-                          "pm.test('Message is Added to cart', function() { pm.expect(pm.response.json().message).to.eql('Added to cart'); });",
-                          "pm.variables.unset('productId');"
-                        ]
-                      }
-                    },
                     {
                       "listen": "prerequest",
                       "script": {
@@ -1293,6 +1350,51 @@
                           "});"
                         ]
                       }
+                    },
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                          "pm.test('Message is Added to cart', function() { pm.expect(pm.response.json().message).to.eql('Added to cart'); });"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "name": "TC-FR07-SEC-008 Step 2: GET Verify",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{userToken}}"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": "{{baseUrl}}/api/cart"
+                  },
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                          "pm.test('TC-FR07-SEC-008 — Payload validation', function() {",
+                          "    var cart = pm.response.json();",
+                          "    var item = cart.find(i => i && i.id === pm.variables.get('productId'));",
+                          "    pm.expect(item).to.not.be.undefined;",
+                          "    pm.expect(item.userId).to.not.eql(999);",
+                          "});",
+                          "pm.variables.unset('productId');"
+                        ]
+                      }
                     }
                   ]
                 }
@@ -1302,7 +1404,7 @@
               "name": "TC-FR07-SEC-009 Prototype pollution",
               "item": [
                 {
-                  "name": "TC-FR07-SEC-009 Prototype pollution",
+                  "name": "TC-FR07-SEC-009 Step 1: POST",
                   "request": {
                     "method": "POST",
                     "header": [
@@ -1322,17 +1424,6 @@
                     }
                   },
                   "event": [
-                    {
-                      "listen": "test",
-                      "script": {
-                        "type": "text/javascript",
-                        "exec": [
-                          "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
-                          "pm.test('Message is Added to cart', function() { pm.expect(pm.response.json().message).to.eql('Added to cart'); });",
-                          "pm.variables.unset('productId');"
-                        ]
-                      }
-                    },
                     {
                       "listen": "prerequest",
                       "script": {
@@ -1364,6 +1455,51 @@
                           "});"
                         ]
                       }
+                    },
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                          "pm.test('Message is Added to cart', function() { pm.expect(pm.response.json().message).to.eql('Added to cart'); });"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "name": "TC-FR07-SEC-009 Step 2: GET Verify",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{userToken}}"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": "{{baseUrl}}/api/cart"
+                  },
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                          "pm.test('TC-FR07-SEC-009 — Payload validation', function() {",
+                          "    var cart = pm.response.json();",
+                          "    var item = cart.find(i => i && i.id === pm.variables.get('productId'));",
+                          "    pm.expect(item).to.not.be.undefined;",
+                          "    pm.expect(item.__proto__).to.be.undefined; pm.expect(item.admin).to.be.undefined;",
+                          "});",
+                          "pm.variables.unset('productId');"
+                        ]
+                      }
                     }
                   ]
                 }
@@ -1373,7 +1509,7 @@
               "name": "TC-FR07-SEC-010 XSS",
               "item": [
                 {
-                  "name": "TC-FR07-SEC-010 XSS",
+                  "name": "TC-FR07-SEC-010 Step 1: POST",
                   "request": {
                     "method": "POST",
                     "header": [
@@ -1393,17 +1529,6 @@
                     }
                   },
                   "event": [
-                    {
-                      "listen": "test",
-                      "script": {
-                        "type": "text/javascript",
-                        "exec": [
-                          "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
-                          "pm.test('Message is Added to cart', function() { pm.expect(pm.response.json().message).to.eql('Added to cart'); });",
-                          "pm.variables.unset('productId');"
-                        ]
-                      }
-                    },
                     {
                       "listen": "prerequest",
                       "script": {
@@ -1433,6 +1558,51 @@
                           "        pm.variables.set('productId', pid);",
                           "    }",
                           "});"
+                        ]
+                      }
+                    },
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                          "pm.test('Message is Added to cart', function() { pm.expect(pm.response.json().message).to.eql('Added to cart'); });"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "name": "TC-FR07-SEC-010 Step 2: GET Verify",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{userToken}}"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": "{{baseUrl}}/api/cart"
+                  },
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                          "pm.test('TC-FR07-SEC-010 — Payload validation', function() {",
+                          "    var cart = pm.response.json();",
+                          "    var item = cart.find(i => i && i.id === pm.variables.get('productId'));",
+                          "    pm.expect(item).to.not.be.undefined;",
+                          "    pm.expect(item.name).to.not.include('<script>');",
+                          "});",
+                          "pm.variables.unset('productId');"
                         ]
                       }
                     }
@@ -1587,7 +1757,7 @@
               "name": "TC-FR07-SEC-013 IDOR Data Isolation",
               "item": [
                 {
-                  "name": "Step 1: User A adds item A",
+                  "name": "TC-FR07-SEC-013 Step 1: User A adds item A",
                   "request": {
                     "method": "POST",
                     "header": [
@@ -1687,7 +1857,7 @@
                   ]
                 },
                 {
-                  "name": "Step 2: User B adds item B",
+                  "name": "TC-FR07-SEC-013 Step 2: User B adds item B",
                   "request": {
                     "method": "POST",
                     "header": [
@@ -1720,7 +1890,7 @@
                   ]
                 },
                 {
-                  "name": "Step 3: User A reads cart",
+                  "name": "TC-FR07-SEC-013 Step 3: User A reads cart",
                   "request": {
                     "method": "GET",
                     "header": [
@@ -1742,15 +1912,15 @@
                         "type": "text/javascript",
                         "exec": [
                           "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
-                          "pm.test('User A cart has Product A', function() { var cart = pm.response.json(); var hasA = cart.some(i => i.id === pm.variables.get('productId')); pm.expect(hasA).to.be.true; });",
-                          "pm.test('User A cart lacks Product B', function() { var cart = pm.response.json(); var hasB = cart.some(i => i.id === pm.variables.get('productIdB')); pm.expect(hasB).to.be.false; });"
+                          "pm.test('User A cart has Product A', function() { var cart = pm.response.json(); var hasA = cart.some(i => i && i.id === pm.variables.get('productId')); pm.expect(hasA).to.be.true; });",
+                          "pm.test('User A cart lacks Product B', function() { var cart = pm.response.json(); var hasB = cart.some(i => i && i.id === pm.variables.get('productIdB')); pm.expect(hasB).to.be.false; });"
                         ]
                       }
                     }
                   ]
                 },
                 {
-                  "name": "Step 4: User B reads cart",
+                  "name": "TC-FR07-SEC-013 Step 4: User B reads cart",
                   "request": {
                     "method": "GET",
                     "header": [
@@ -1772,8 +1942,8 @@
                         "type": "text/javascript",
                         "exec": [
                           "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
-                          "pm.test('User B cart has Product B', function() { var cart = pm.response.json(); var hasB = cart.some(i => i.id === pm.variables.get('productIdB')); pm.expect(hasB).to.be.true; });",
-                          "pm.test('User B cart lacks Product A', function() { var cart = pm.response.json(); var hasA = cart.some(i => i.id === pm.variables.get('productId')); pm.expect(hasA).to.be.false; });",
+                          "pm.test('User B cart has Product B', function() { var cart = pm.response.json(); var hasB = cart.some(i => i && i.id === pm.variables.get('productIdB')); pm.expect(hasB).to.be.true; });",
+                          "pm.test('User B cart lacks Product A', function() { var cart = pm.response.json(); var hasA = cart.some(i => i && i.id === pm.variables.get('productId')); pm.expect(hasA).to.be.false; });",
                           "// Teardown User B",
                           "if (pm.variables.get('sec013_userId')) {",
                           "    pm.sendRequest({ url: pm.environment.get('baseUrl') + '/api/admin/users/' + pm.variables.get('sec013_userId'), method: 'DELETE', header: { 'Authorization': 'Bearer ' + pm.environment.get('adminToken') } }, function(){});",
@@ -3141,7 +3311,7 @@
               "name": "TC-FR07-IDP-001 Verify non-idempotent accumulation",
               "item": [
                 {
-                  "name": "Step 1: POST First Call",
+                  "name": "TC-FR07-IDP-001 Step 1: POST First Call",
                   "request": {
                     "method": "POST",
                     "header": [
@@ -3206,7 +3376,7 @@
                   ]
                 },
                 {
-                  "name": "Step 2: POST Repeat Call",
+                  "name": "TC-FR07-IDP-001 Step 2: POST Repeat Call",
                   "request": {
                     "method": "POST",
                     "header": [
@@ -3239,7 +3409,7 @@
                   ]
                 },
                 {
-                  "name": "Step 3: GET Verify quantity",
+                  "name": "TC-FR07-IDP-001 Step 3: GET Verify quantity",
                   "request": {
                     "method": "GET",
                     "header": [
@@ -3261,7 +3431,7 @@
                         "type": "text/javascript",
                         "exec": [
                           "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
-                          "pm.test('Quantity is accumulated (4)', function() { var cart = pm.response.json(); var item = cart.find(i => i.id === pm.variables.get('productId')); pm.expect(item).to.not.be.undefined; pm.expect(item.quantity).to.be.oneOf([4, 2]); });",
+                          "pm.test('Quantity is accumulated (4)', function() { var cart = pm.response.json(); var item = cart.find(i => i && i.id === pm.variables.get('productId')); pm.expect(item).to.not.be.undefined; pm.expect(item.quantity).to.be.oneOf([4, 2]); });",
                           "pm.variables.unset('productId');"
                         ]
                       }
