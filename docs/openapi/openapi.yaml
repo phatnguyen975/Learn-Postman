@@ -12,6 +12,8 @@ servers:
 tags:
   - name: "Authentication"
     description: "User registration, login, and password management"
+  - name: "Cart"
+    description: "Shopping cart operations"
 
 security:
   - BearerAuth: []
@@ -28,6 +30,12 @@ components:
   responses:
     BadRequest:
       $ref: "./components/responses/BadRequest.yaml"
+    Unauthorized:
+      $ref: "./components/responses/Unauthorized.yaml"
+    Forbidden:
+      $ref: "./components/responses/Forbidden.yaml"
+    NotFound:
+      $ref: "./components/responses/NotFound.yaml"
     Conflict:
       $ref: "./components/responses/Conflict.yaml"
     InternalServerError:
@@ -40,3 +48,5 @@ components:
 paths:
   /api/register:
     $ref: "./paths/auth/register.yaml"
+  /api/cart:
+    $ref: "./paths/cart/cart-add.yaml"
