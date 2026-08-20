@@ -44,38 +44,31 @@ N/A
 
 #### Field Constraints
 
-| Field      | Type   | Required | Constraints                                                                                                                                                                                                                                                                            | Default | Notes                                                                                                                                                               |
-| ---------- | ------ | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`     | string | Yes      | Non-empty; min 1 character; max 100 characters [inferred — OWASP Input Validation Cheat Sheet]; must not be whitespace-only; leading/trailing spaces should be trimmed [inferred — e-commerce convention]                                                                              | N/A     | Accepts Unicode including Vietnamese diacritics. **Current SUT: no validation — NULL and empty string accepted.**                                                   |
-| `email`    | string | Yes      | RFC 5322 format (`local@domain.tld`); max 254 characters [inferred — RFC 5321 §4.5.3]; must be unique system-wide; case-insensitive comparison [inferred — e-commerce convention]; no whitespace allowed                                                                               | N/A     | **Current SUT: no format validation. No UNIQUE constraint in DB schema (database.js L53). Duplicate emails are NOT rejected — silently inserted as separate rows.** |
-| `password` | string | Yes      | Min 8 characters [source — SRS FR-01]; ≥1 uppercase letter A–Z [source — SRS FR-01]; ≥1 lowercase letter a–z [source — SRS FR-01]; ≥1 digit 0–9 [source — SRS FR-01]; ≥1 special character from `@$!%*?&` [source — SRS FR-01]; max 128 characters [inferred — OWASP Auth Cheat Sheet] | N/A     | **Current SUT: no validation — any string accepted including empty. Stored as plaintext (Critical Bug — SEC-01 violation).**                                        |
+| Field      | Type   | Required | Constraints                                                                                                                                                                                                                                                                            | Default | Notes                                                                                                                                             |
+| ---------- | ------ | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`     | string | Yes      | Non-empty; min 1 character; max 100 characters [inferred — OWASP Input Validation Cheat Sheet]; must not be whitespace-only; leading/trailing spaces should be trimmed [inferred — e-commerce convention]                                                                              | N/A     | Accepts Unicode including Vietnamese diacritics. **Current SUT: no validation — NULL and empty string accepted.**                                 |
+| `email`    | string | Yes      | RFC 5322 format (`local@domain.tld`); max 254 characters [inferred — RFC 5321 §4.5.3]; must be unique system-wide; case-insensitive comparison [inferred — e-commerce convention]; no whitespace allowed                                                                               | N/A     | **Current SUT: no format validation. No UNIQUE constraint in DB schema. Duplicate emails are NOT rejected — silently inserted as separate rows.** |
+| `password` | string | Yes      | Min 8 characters [source — SRS FR-01]; ≥1 uppercase letter A–Z [source — SRS FR-01]; ≥1 lowercase letter a–z [source — SRS FR-01]; ≥1 digit 0–9 [source — SRS FR-01]; ≥1 special character from `@$!%*?&` [source — SRS FR-01]; max 128 characters [inferred — OWASP Auth Cheat Sheet] | N/A     | **Current SUT: no validation — any string accepted including empty. Stored as plaintext (Critical Bug — SEC-01 violation).**                      |
 
 > **`confirmPassword` field:** Required by SRS FR-01 at the UI level. This field does **not** exist at the API level. The backend does not accept or validate `confirmPassword`. N/A at API contract scope.
 
-> **`role` field:** Any `role` value sent in the request body is silently ignored (server.js L94 only destructures `{name, email, password}`). The `role` column defaults to `'user'` (database.js L55). Role escalation via this endpoint is not possible in the current implementation, but must be verified via a dedicated test case.
+> **`role` field:** Any `role` value sent in the request body is silently ignored. The `role` column defaults to `'user'`. Role escalation via this endpoint is not possible in the current implementation, but must be verified via a dedicated test case.
 
 ## 3. Business Rules
 
-- **BR-01:** All three fields — `name`, `email`, `password` — are **required**. A request missing any of these fields must be rejected with `400 Bad Request`. **[SUT violation: missing fields result in NULL being inserted — not enforced]**
-
-- **BR-02:** The `email` field must conform to RFC 5322 email format (`local@domain.tld`). Invalid formats must be rejected with `400 Bad Request`. **[SUT violation: no format validation — any string accepted]**
-
-- **BR-03:** The `email` address must be **unique** across all registered users. Email uniqueness comparison must be **case-insensitive** [inferred — e-commerce convention]. A duplicate email must be rejected with `409 Conflict`. **[SUT violation: no UNIQUE constraint in DB; duplicates silently created]**
-
+- **BR-01:** All three fields — `name`, `email`, `password` — are **required**. A request missing any of these fields must be rejected with `400 Bad Request`.
+- **BR-02:** The `email` field must conform to RFC 5322 email format (`local@domain.tld`). Invalid formats must be rejected with `400 Bad Request`.
+- **BR-03:** The `email` address must be **unique** across all registered users. Email uniqueness comparison must be **case-insensitive** [inferred — e-commerce convention]. A duplicate email must be rejected with `409 Conflict`.
 - **BR-04:** The `password` must satisfy the strong password policy from SRS FR-01:
   - Minimum **8 characters**
   - At least **1 uppercase letter** (A–Z)
   - At least **1 lowercase letter** (a–z)
   - At least **1 digit** (0–9)
   - At least **1 special character** from the set: `@`, `$`, `!`, `%`, `*`, `?`, `&`
-    Passwords failing this policy must be rejected with `400 Bad Request`. **[SUT violation: no validation — any password accepted]**
-
-- **BR-05:** The `password` must be stored as a **cryptographic hash** (e.g., bcrypt with cost factor ≥ 10 [inferred — OWASP Auth Cheat Sheet]). Storing or returning plaintext passwords is prohibited (SEC-01). **[SUT violation: password stored as plaintext — Critical Bug]**
-
+    Passwords failing this policy must be rejected with `400 Bad Request`.
+- **BR-05:** The `password` must be stored as a **cryptographic hash** (e.g., bcrypt with cost factor ≥ 10 [inferred — OWASP Auth Cheat Sheet]). Storing or returning plaintext passwords is prohibited (SEC-01).
 - **BR-06:** The `name` field must not be empty or consist solely of whitespace characters. Blank names must be rejected with `400 Bad Request`. **[SUT violation: not enforced]**
-
-- **BR-07:** The registered account's `role` is **always** set to `'user'` by default. The caller cannot set the `role` field via this endpoint. Any `role` value in the request body must be **silently ignored**. [Source — database.js L55: `role TEXT DEFAULT 'user'`; server.js L94 does not extract `role`]
-
+- **BR-07:** The registered account's `role` is **always** set to `'user'` by default. The caller cannot set the `role` field via this endpoint. Any `role` value in the request body must be **silently ignored**.
 - **BR-08:** Upon successful registration, the system creates a new user record with these initial field values:
   - `role` = `'user'`
   - `login_attempts` = `0`
@@ -83,12 +76,9 @@ N/A
   - `reset_token` = `NULL`
   - `shipping_address` = `NULL`
   - `phone` = `NULL`
-
-- **BR-09:** The success response body must include `message` (string) and `id` (integer). The response must **not** include the `password` field. [Source — api-spec.md §1.1; server.js L100]
-
+- **BR-09:** The success response body must include `message` (string) and `id` (integer). The response must **not** include the `password` field. [Source — api-spec.md §1.1]
 - **BR-10:** If the request body is not valid JSON (malformed syntax), the server must return `400 Bad Request`. [Enforced by body-parser middleware]
-
-- **BR-11 [inferred — e-commerce rate limiting convention, OWASP API Security Top 10]:** The registration endpoint should enforce a rate limit of no more than 5 attempts per IP per hour to prevent automated account creation. **[SUT: not implemented — documented Known Constraint]**
+- **BR-11 [inferred — e-commerce rate limiting convention, OWASP API Security Top 10]:** The registration endpoint should enforce a rate limit of no more than 5 attempts per IP per hour to prevent automated account creation.
 
 ## 4. Response Definitions
 
@@ -170,7 +160,7 @@ N/A
 
 ### 4.5 500 Internal Server Error — Database Error / Constraint Violation
 
-**Trigger (actual SUT behavior for some error conditions):** An unhandled database error occurs. The handler passes raw `err.message` to the response (server.js L99). This exposes internal SQLite error messages.
+**Trigger (actual SUT behavior for some error conditions):** An unhandled database error occurs. The handler passes raw `err.message` to the response. This exposes internal SQLite error messages.
 
 ```json
 {
@@ -224,29 +214,16 @@ N/A
 
 ## 6. Security Rules
 
-| Rule ID        | Description                                                                                                                                       | Applicable Test Vector                                                                                                                               | Status in SUT                                                                      |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| SEC-01         | Password must not be stored as plaintext; must be hashed with bcrypt or equivalent.                                                               | Register with `"password": "Password123!"`, then attempt login with same password — if login succeeds AND DB row shows plaintext, SEC-01 is violated | **VIOLATED** — SUT stores plaintext                                                |
-| SEC-01b        | Response body must not contain the `password` field (plaintext or hash).                                                                          | Inspect HTTP `200` response body — verify no `password` key present                                                                                  | **COMPLIANT** — response only returns `{message, id}`                              |
-| SEC-04 (XSS)   | User-supplied `name` stored in DB must be safely rendered in UI (no raw `innerHTML`). Applies when name is later displayed in user profile pages. | Send `name` = `<script>alert(1)</script>` — verify API accepts or rejects; then verify that if stored, it is escaped when displayed                  | Needs frontend verification                                                        |
-| SEC-05 (SQLi)  | All DB queries must use parameterized queries. No string concatenation with user input.                                                           | Send `email` = `'; DROP TABLE users;--` — verify server returns error or ignores injection; `users` table must remain intact                         | **COMPLIANT** — uses `?` placeholders (server.js L96)                              |
-| SEC-05b (SQLi) | SQL injection via `name` field.                                                                                                                   | Send `name` = `'; SELECT * FROM users;--` — verify no injection side effects                                                                         | **COMPLIANT** — parameterized                                                      |
-| SEC-06         | The `role` field must not be settable by the caller via the registration endpoint (mass assignment).                                              | Send `{"name":"A","email":"sec06@test.com","password":"Pass1!aB","role":"admin"}` — verify created user has `role = 'user'`                          | **COMPLIANT** — server only destructures `{name, email, password}` (server.js L94) |
-| SEC-02         | Not applicable — this endpoint is intentionally public. No authentication required.                                                               | N/A                                                                                                                                                  | N/A                                                                                |
-| SEC-03         | Not applicable — this is not an admin endpoint.                                                                                                   | N/A                                                                                                                                                  | N/A                                                                                |
-| SEC-07         | Not applicable — no OTP generation or verification involved.                                                                                      | N/A                                                                                                                                                  | N/A                                                                                |
-| Rate Limiting  | Registration should be rate-limited to prevent automated bulk account creation. [inferred — OWASP API Security Top 10]                            | Send 10+ rapid consecutive POST requests — verify `429 Too Many Requests` is returned after threshold                                                | **NOT IMPLEMENTED** — Known Constraint                                             |
-| Sensitive Data | Error responses must not expose raw internal error details (SQLite messages, stack traces).                                                       | Trigger a DB-level error (duplicate email if UNIQUE constraint is active) — verify response does not contain raw SQL error                           | **VIOLATED** — `err.message` directly exposed (server.js L99)                      |
-
-## 7. Known Deviations (Contract vs. SUT)
-
-| ID     | Expected Behavior (Contract)                                   | Actual SUT Behavior                                                            | Severity | Related Rule   |
-| ------ | -------------------------------------------------------------- | ------------------------------------------------------------------------------ | -------- | -------------- |
-| DEV-01 | Password stored as bcrypt hash                                 | Password stored as **plaintext**                                               | Critical | SEC-01         |
-| DEV-02 | Missing/empty `name` → `400 Bad Request`                       | NULL inserted into DB; `200 OK` returned                                       | High     | BR-01, BR-06   |
-| DEV-03 | Invalid email format → `400 Bad Request`                       | Invalid email inserted; `200 OK` returned                                      | High     | BR-01, BR-02   |
-| DEV-04 | Weak password (fails complexity) → `400 Bad Request`           | Weak/empty password inserted; `200 OK` returned                                | High     | BR-01, BR-04   |
-| DEV-05 | Duplicate email → `409 Conflict`                               | Duplicate row silently created; `200 OK` returned (no UNIQUE constraint in DB) | High     | BR-03          |
-| DEV-06 | Success response code → `201 Created`                          | `200 OK` returned                                                              | Low      | BR-09          |
-| DEV-07 | DB errors → generic error message (no internal detail exposed) | Raw SQLite `err.message` exposed to client                                     | Medium   | Sensitive Data |
-| DEV-08 | Rate limiting: `429` after threshold                           | No rate limiting implemented                                                   | Medium   | BR-11          |
+| Rule ID        | Description                                                                                                                                       | Applicable Test Vector                                                                                                                               | Status in SUT                                                      |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| SEC-01         | Password must not be stored as plaintext; must be hashed with bcrypt or equivalent.                                                               | Register with `"password": "Password123!"`, then attempt login with same password — if login succeeds AND DB row shows plaintext, SEC-01 is violated | **VIOLATED** — SUT stores plaintext                                |
+| SEC-01b        | Response body must not contain the `password` field (plaintext or hash).                                                                          | Inspect HTTP `200` response body — verify no `password` key present                                                                                  | **COMPLIANT** — response only returns `{message, id}`              |
+| SEC-04 (XSS)   | User-supplied `name` stored in DB must be safely rendered in UI (no raw `innerHTML`). Applies when name is later displayed in user profile pages. | Send `name` = `<script>alert(1)</script>` — verify API accepts or rejects; then verify that if stored, it is escaped when displayed                  | Needs frontend verification                                        |
+| SEC-05 (SQLi)  | All DB queries must use parameterized queries. No string concatenation with user input.                                                           | Send `email` = `'; DROP TABLE users;--` — verify server returns error or ignores injection; `users` table must remain intact                         | **COMPLIANT** — uses `?` placeholders                              |
+| SEC-05b (SQLi) | SQL injection via `name` field.                                                                                                                   | Send `name` = `'; SELECT * FROM users;--` — verify no injection side effects                                                                         | **COMPLIANT** — parameterized                                      |
+| SEC-06         | The `role` field must not be settable by the caller via the registration endpoint (mass assignment).                                              | Send `{"name":"A","email":"sec06@test.com","password":"Pass1!aB","role":"admin"}` — verify created user has `role = 'user'`                          | **COMPLIANT** — server only destructures `{name, email, password}` |
+| SEC-02         | Not applicable — this endpoint is intentionally public. No authentication required.                                                               | N/A                                                                                                                                                  | N/A                                                                |
+| SEC-03         | Not applicable — this is not an admin endpoint.                                                                                                   | N/A                                                                                                                                                  | N/A                                                                |
+| SEC-07         | Not applicable — no OTP generation or verification involved.                                                                                      | N/A                                                                                                                                                  | N/A                                                                |
+| Rate Limiting  | Registration should be rate-limited to prevent automated bulk account creation. [inferred — OWASP API Security Top 10]                            | Send 10+ rapid consecutive POST requests — verify `429 Too Many Requests` is returned after threshold                                                | **NOT IMPLEMENTED** — Known Constraint                             |
+| Sensitive Data | Error responses must not expose raw internal error details (SQLite messages, stack traces).                                                       | Trigger a DB-level error (duplicate email if UNIQUE constraint is active) — verify response does not contain raw SQL error                           | **VIOLATED** — `err.message` directly exposed                      |
