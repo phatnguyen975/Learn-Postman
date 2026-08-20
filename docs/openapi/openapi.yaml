@@ -10,6 +10,8 @@ servers:
     description: "Local development server"
 
 tags:
+  - name: "Admin"
+    description: "Administrator operations including product, category, and coupon management"
   - name: "Authentication"
     description: "User registration, login, and password management"
   - name: "Cart"
@@ -50,3 +52,5 @@ paths:
     $ref: "./paths/auth/register.yaml"
   /api/cart:
     $ref: "./paths/cart/cart-add.yaml"
+  /api/admin/coupons:
+    $ref: "./paths/admin/coupon-create.yaml"

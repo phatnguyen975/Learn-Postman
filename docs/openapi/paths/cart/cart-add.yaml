@@ -1,5 +1,5 @@
 post:
-  summary: "Add Item to Cart"
+  summary: "Adds a product to the shopping cart"
   description: |
     Adds a product to the authenticated user's shopping cart.
 

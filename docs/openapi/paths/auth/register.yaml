@@ -1,5 +1,5 @@
 post:
-  summary: "Account Registration"
+  summary: "Creates a new user account"
   description: |
     Creates a new user account.
 
