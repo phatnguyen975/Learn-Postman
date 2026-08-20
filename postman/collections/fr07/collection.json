@@ -3,6 +3,13 @@
     "name": "FR07 — POST /api/cart",
     "schema": "https://schema.postman.com/collection/json/v2.1.0/collection.json"
   },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
+  ],
   "event": [
     {
       "listen": "prerequest",
@@ -23,7 +30,7 @@
           "    });",
           "}",
           "",
-          "// Auto-login User A",
+          "// Auto-login User",
           "if (!pm.environment.get('userToken')) {",
           "    pm.sendRequest({",
           "        url: pm.environment.get('baseUrl') + '/api/login',",
@@ -60,7 +67,7 @@
       "name": "Static TCs",
       "item": [
         {
-          "name": "TC-ST State Transition",
+          "name": "TC-ST",
           "item": [
             {
               "name": "TC-FR07-ST-001 Add new item",
@@ -717,7 +724,7 @@
           ]
         },
         {
-          "name": "TC-SEC Security",
+          "name": "TC-SEC",
           "item": [
             {
               "name": "TC-FR07-SEC-001 No auth",
@@ -1962,7 +1969,7 @@
           ]
         },
         {
-          "name": "TC-SCH Schema Validation",
+          "name": "TC-SCH",
           "item": [
             {
               "name": "TC-FR07-SCH-001 Verify success message",
@@ -2463,7 +2470,7 @@
           ]
         },
         {
-          "name": "TC-ERR Error Handling",
+          "name": "TC-ERR",
           "item": [
             {
               "name": "TC-FR07-ERR-001 Empty JSON",
@@ -3305,7 +3312,7 @@
           ]
         },
         {
-          "name": "TC-IDP Idempotency",
+          "name": "TC-IDP",
           "item": [
             {
               "name": "TC-FR07-IDP-001 Verify non-idempotent accumulation",

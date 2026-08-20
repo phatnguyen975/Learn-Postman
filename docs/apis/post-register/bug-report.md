@@ -139,7 +139,7 @@ The API accepts all invalid inputs and responds with a success message. No valid
 - **Newman Report:** `postman/reports/fr01-report.html`
 - **Screenshot:**
 
-![BUG-FR01-001](../../screenshots/BUG-FR01-001.png)
+![BUG-FR01-001](../../screenshots/fr01/BUG-FR01-001.png)
 
 ### Impact
 
@@ -222,7 +222,7 @@ A duplicate row is silently inserted. The different-case variant also succeeds w
 - **Newman Report:** `postman/reports/fr01-report.html`
 - **Screenshot:**
 
-![BUG-FR01-002](../../screenshots/BUG-FR01-002.png)
+![BUG-FR01-002](../../screenshots/fr01/BUG-FR01-002.png)
 
 ### Impact
 
@@ -303,7 +303,7 @@ The plaintext password is stored verbatim.
 - **Newman Report:** `postman/reports/fr01-report.html`
 - **Screenshot:**
 
-![BUG-FR01-003](../../screenshots/BUG-FR01-003.png)
+![BUG-FR01-003](../../screenshots/fr01/BUG-FR01-003.png)
 
 ### Impact
 
@@ -411,7 +411,7 @@ Both responses expose internal stack traces and implementation details.
 - **Newman Report:** `postman/reports/fr01-report.html`
 - **Screenshot:**
 
-![BUG-FR01-004](../../screenshots/BUG-FR01-004.png)
+![BUG-FR01-004](../../screenshots/fr01/BUG-FR01-004.png)
 
 ### Impact
 
