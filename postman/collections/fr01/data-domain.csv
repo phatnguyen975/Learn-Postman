@@ -4,7 +4,7 @@ TC-FR01-FR-002,A,min1@domain.com,Password123!,200,User registered successfully
 TC-FR01-FR-003,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,max100@domain.com,Password123!,200,User registered successfully
 TC-FR01-FR-004,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,over100@domain.com,Password123!,400,validation error
 TC-FR01-FR-005,,empty-name@domain.com,Password123!,400,validation error
-TC-FR01-FR-006," ",ws-name@domain.com,Password123!,400,validation error
+TC-FR01-FR-006,   ,ws-name@domain.com,Password123!,400,validation error
 TC-FR01-FR-007,Nguyễn Văn An,vn-name@domain.com,Password123!,200,User registered successfully
 TC-FR01-FR-008,Test User,invalidemail.com,Password123!,400,validation error
 TC-FR01-FR-009,Test User,user@,Password123!,400,validation error
