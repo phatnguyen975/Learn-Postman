@@ -1,20 +1,20 @@
 # AI Audit Log (FR-17) — August 2026
 
-> **Last updated:** 2026-08-21T19:41:15+07:00
+> **Last updated:** 2026-08-21T20:48:56+07:00
 
 ## Monthly Statistics
 
 - **Period:** 2026-08-01 → 2026-08-21
-- **Total Interactions:** 10
-- **Models Used:** Claude Sonnet 4.6 (Thinking) (2), Gemini 3.1 Pro (High) (8)
+- **Total Interactions:** 13
+- **Models Used:** Claude Sonnet 4.6 (Thinking) (2), Gemini 3.1 Pro (High) (11)
 
 ### Status Breakdown
 
 | Status        | Count  | %   |
 | ------------- | ------ | --- |
-| ✅ VALID      | 6      | 60% |
-| ⚠️ PARTIAL    | 0      | 0%  |
-| 🔄 REVISED    | 4      | 40% |
+| ✅ VALID      | 7      | 54% |
+| ⚠️ PARTIAL    | 1      | 8%  |
+| 🔄 REVISED    | 5      | 38% |
 | ❌ INVALID    | 0      | 0%  |
 | 🔲 INCOMPLETE | 0      | 0%  |
 | ⏳ PENDING    | 0      | 0%  |
@@ -31,8 +31,8 @@
 
 ### Quality Metrics
 
-- **Acceptance Rate** (VALID + PARTIAL / Total): 60%
-- **Revision Rate** (REVISED / Total): 40%
+- **Acceptance Rate** (VALID + PARTIAL / Total): 62%
+- **Revision Rate** (REVISED / Total): 38%
 - **Failure Rate** (INVALID + INCOMPLETE / Total): 0%
 
 ## [AI-AUDIT-001] 2026-08-21T05:42:45+07:00
@@ -335,3 +335,79 @@ TC-FR17-SEC-010 bạn phải thêm bước lấy danh sách coupon và kiểm tr
 | Reason   | AI successfully added GET validation steps for specific TCs where assertions on POST response were insufficient. |
 | Revised  | No                                                                                                               |
 | Revision |                                                                                                                  |
+
+## [AI-AUDIT-011] 2026-08-21T20:52:07+07:00
+
+### Metadata
+
+- **Model:** Gemini 3.1 Pro (High)
+- **Tags:** `testing` · `backend` · `debugging`
+- **Status:** 🔄 REVISED
+
+### Prompt
+
+```prompt
+TC-FR17-SCH-001, 002, và 003 thì trong collection ID nó đang dùng là TC-FR17-SCH-001/002/003. Đồng thời tôi chạy lại thì thấy admin login được bình thường mà, có bị 403 đâu. Bạn hãy chạy lại kiểm tra một lần nữa.
+```
+
+### Output
+
+- `postman/collections/fr17/collection.json` — Fixed syntax error `{ adminToken }` to `{adminToken}` and split `TC-FR17-SCH-001/002/003` into 3 separate requests.
+- `docs/apis/post-admin-coupons/test-cases.md` — Updated results via Newman execution (though initial parsing resulted in raw format issues).
+
+### Evaluation
+
+| Field    | Detail                                                   |
+| -------- | -------------------------------------------------------- |
+| Reason   | I need to double-check the results after the AI's fixes. |
+| Revision | None                                                     |
+
+## [AI-AUDIT-012] 2026-08-21T20:52:07+07:00
+
+### Metadata
+
+- **Model:** Gemini 3.1 Pro (High)
+- **Tags:** `testing` · `backend` · `script`
+- **Status:** ⚠️ PARTIAL
+
+### Prompt
+
+```prompt
+Về các kết quả của bạn parse trong test-cases.md, các section Manual Extension TCs — 5 Additional Cases và Audit log phải giữ nguyên như cũ, không được sửa lại thêm pass/fail vào 2 section này. Còn với các TC ở trên (có cột status và actual result) thì mới sửa và thêm vào đây, nhưng chỗ actual result bạn không được để raw value, phải trình bày giải thích lại từ raw value đó. Hãy kiểm tra và sửa lại cho tôi.
+```
+
+### Output
+
+- `docs/apis/post-admin-coupons/test-cases.md` — Restored `Manual Extension TCs` and `Audit Log` tables that were corrupted by the parser script, and translated raw JSON/HTML into textual explanations.
+
+### Evaluation
+
+| Field    | Detail                                                                                                                                                |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Reason   | The AI fixed the structural issues mostly fine, but there were still some parts that were not entirely aligned with my expectations (e.g., language). |
+| Revision | None                                                                                                                                                  |
+
+## [AI-AUDIT-013] 2026-08-21T20:52:07+07:00
+
+### Metadata
+
+- **Model:** Gemini 3.1 Pro (High)
+- **Tags:** `testing` · `backend` · `script`
+- **Status:** ✅ VALID
+
+### Prompt
+
+```prompt
+Bạn đã hiểu sai ý của tôi rồi, tôi cần bạn đọc và format lại actual result, giải thích lại từ các raw value, không được ghi thẳng raw value vào, nhất là có TC trả về html, và phải trình bày tiếng anh, chứ không phải yêu cầu bạn đi chạy lại bằng newman.
+```
+
+### Output
+
+- `docs/apis/post-admin-coupons/test-cases.md` — Translated all Actual Result explanations to descriptive English sentences and formatted output correctly without modifying other tables.
+
+### Evaluation
+
+| Field    | Detail                                                                                                        |
+| -------- | ------------------------------------------------------------------------------------------------------------- |
+| Reason   | The AI correctly understood the feedback and formatted the actual results accurately in English as requested. |
+| Revision | None                                                                                                          |

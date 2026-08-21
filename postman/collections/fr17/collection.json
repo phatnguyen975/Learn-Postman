@@ -89,7 +89,7 @@
                     "header": [
                       {
                         "key": "Authorization",
-                        "value": "Bearer {{ adminToken }}"
+                        "value": "Bearer {{adminToken}}"
                       },
                       {
                         "key": "Content-Type",
@@ -124,7 +124,7 @@
                     "header": [
                       {
                         "key": "Authorization",
-                        "value": "Bearer {{ adminToken }}"
+                        "value": "Bearer {{adminToken}}"
                       }
                     ],
                     "url": {
@@ -173,7 +173,7 @@
                     "header": [
                       {
                         "key": "Authorization",
-                        "value": "Bearer {{ adminToken }}"
+                        "value": "Bearer {{adminToken}}"
                       },
                       {
                         "key": "Content-Type",
@@ -210,7 +210,7 @@
                     "header": [
                       {
                         "key": "Authorization",
-                        "value": "Bearer {{ adminToken }}"
+                        "value": "Bearer {{adminToken}}"
                       }
                     ],
                     "url": {
@@ -274,7 +274,7 @@
                 "header": [
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{ userToken }}"
+                    "value": "Bearer {{userToken}}"
                   },
                   {
                     "key": "Content-Type",
@@ -306,7 +306,7 @@
                 "header": [
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{ adminToken }}"
+                    "value": "Bearer {{adminToken}}"
                   },
                   {
                     "key": "Content-Type",
@@ -341,7 +341,7 @@
                     "header": [
                       {
                         "key": "Authorization",
-                        "value": "Bearer {{ adminToken }}"
+                        "value": "Bearer {{adminToken}}"
                       },
                       {
                         "key": "Content-Type",
@@ -378,7 +378,7 @@
                     "header": [
                       {
                         "key": "Authorization",
-                        "value": "Bearer {{ adminToken }}"
+                        "value": "Bearer {{adminToken}}"
                       }
                     ],
                     "url": {
@@ -414,7 +414,7 @@
                 "header": [
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{ adminToken }}"
+                    "value": "Bearer {{adminToken}}"
                   },
                   {
                     "key": "Content-Type",
@@ -575,7 +575,7 @@
                 "header": [
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{ userToken }}"
+                    "value": "Bearer {{userToken}}"
                   },
                   {
                     "key": "Content-Type",
@@ -656,7 +656,7 @@
                 "header": [
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{ adminToken }}"
+                    "value": "Bearer {{adminToken}}"
                   },
                   {
                     "key": "Content-Type",
@@ -688,7 +688,7 @@
                 "header": [
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{ adminToken }}"
+                    "value": "Bearer {{adminToken}}"
                   },
                   {
                     "key": "Content-Type",
@@ -720,7 +720,7 @@
                 "header": [
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{ adminToken }}"
+                    "value": "Bearer {{adminToken}}"
                   },
                   {
                     "key": "Content-Type",
@@ -755,7 +755,7 @@
                     "header": [
                       {
                         "key": "Authorization",
-                        "value": "Bearer {{ adminToken }}"
+                        "value": "Bearer {{adminToken}}"
                       },
                       {
                         "key": "Content-Type",
@@ -790,7 +790,7 @@
                     "header": [
                       {
                         "key": "Authorization",
-                        "value": "Bearer {{ adminToken }}"
+                        "value": "Bearer {{adminToken}}"
                       }
                     ],
                     "url": {
@@ -831,7 +831,7 @@
                 "header": [
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{ adminToken }}"
+                    "value": "Bearer {{adminToken}}"
                   },
                   {
                     "key": "Content-Type",
@@ -912,13 +912,113 @@
           "name": "TC-SCH",
           "item": [
             {
-              "name": "TC-FR17-SCH-001/002/003 — Verify 200 response schema",
+              "name": "TC-FR17-SCH-001 — Verify 200 response schema part 001",
               "request": {
                 "method": "POST",
                 "header": [
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{ adminToken }}"
+                    "value": "Bearer {{adminToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/admin/coupons",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"code\": \"SCH200A\", \"type\": \"percent\", \"discount_value\": 10, \"min_order_amount\": 0, \"expired_at\": \"2027-12-31\"}"
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Status is 200', function () { pm.response.to.have.status(200); });",
+                      "pm.test('Schema matches', function() { pm.response.to.have.jsonSchema({\"type\": \"object\", \"required\": [\"message\", \"id\"], \"properties\": {\"message\": {\"type\": \"string\", \"enum\": [\"Coupon created\"]}, \"id\": {\"type\": \"integer\"}}, \"additionalProperties\": false}); });",
+                      "",
+                      "if (pm.response.code === 200) {",
+                      "    let jsonData = pm.response.json();",
+                      "    if (jsonData && jsonData.id) {",
+                      "        let req = {",
+                      "            url: pm.environment.get(\"baseUrl\") + \"/api/admin/coupons/\" + jsonData.id,",
+                      "            method: 'DELETE',",
+                      "            header: {",
+                      "                'Authorization': 'Bearer ' + pm.environment.get(\"adminToken\")",
+                      "            }",
+                      "        };",
+                      "        pm.sendRequest(req, function (err, res) {",
+                      "            console.log(\"Teardown delete: \" + jsonData.id);",
+                      "        });",
+                      "    }",
+                      "}",
+                      ""
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "TC-FR17-SCH-002 — Verify 200 response schema part 002",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/admin/coupons",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"code\": \"SCH200A\", \"type\": \"percent\", \"discount_value\": 10, \"min_order_amount\": 0, \"expired_at\": \"2027-12-31\"}"
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Status is 200', function () { pm.response.to.have.status(200); });",
+                      "pm.test('Schema matches', function() { pm.response.to.have.jsonSchema({\"type\": \"object\", \"required\": [\"message\", \"id\"], \"properties\": {\"message\": {\"type\": \"string\", \"enum\": [\"Coupon created\"]}, \"id\": {\"type\": \"integer\"}}, \"additionalProperties\": false}); });",
+                      "",
+                      "if (pm.response.code === 200) {",
+                      "    let jsonData = pm.response.json();",
+                      "    if (jsonData && jsonData.id) {",
+                      "        let req = {",
+                      "            url: pm.environment.get(\"baseUrl\") + \"/api/admin/coupons/\" + jsonData.id,",
+                      "            method: 'DELETE',",
+                      "            header: {",
+                      "                'Authorization': 'Bearer ' + pm.environment.get(\"adminToken\")",
+                      "            }",
+                      "        };",
+                      "        pm.sendRequest(req, function (err, res) {",
+                      "            console.log(\"Teardown delete: \" + jsonData.id);",
+                      "        });",
+                      "    }",
+                      "}",
+                      ""
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "TC-FR17-SCH-003 — Verify 200 response schema part 003",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{adminToken}}"
                   },
                   {
                     "key": "Content-Type",
@@ -968,7 +1068,7 @@
                 "header": [
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{ adminToken }}"
+                    "value": "Bearer {{adminToken}}"
                   },
                   {
                     "key": "Content-Type",
@@ -988,7 +1088,7 @@
                     "type": "text/javascript",
                     "exec": [
                       "pm.test('Status is 200', function () { pm.response.to.have.status(200); });",
-                      "pm.test('Content-Type is json', function() { pm.response.to.have.header('Content-Type', 'application/json'); });",
+                      "pm.test('Content-Type is json', function() { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
                       "",
                       "if (pm.response.code === 200) {",
                       "    let jsonData = pm.response.json();",
@@ -1018,7 +1118,7 @@
                 "header": [
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{ adminToken }}"
+                    "value": "Bearer {{adminToken}}"
                   },
                   {
                     "key": "Content-Type",
@@ -1080,7 +1180,7 @@
                 "header": [
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{ userToken }}"
+                    "value": "Bearer {{userToken}}"
                   },
                   {
                     "key": "Content-Type",
@@ -1113,7 +1213,7 @@
                 "header": [
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{ adminToken }}"
+                    "value": "Bearer {{adminToken}}"
                   },
                   {
                     "key": "Content-Type",
@@ -1151,7 +1251,7 @@
                 "header": [
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{ adminToken }}"
+                    "value": "Bearer {{adminToken}}"
                   },
                   {
                     "key": "Content-Type",
@@ -1183,7 +1283,7 @@
                 "header": [
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{ adminToken }}"
+                    "value": "Bearer {{adminToken}}"
                   }
                 ],
                 "url": "{{baseUrl}}/api/admin/coupons"
@@ -1207,7 +1307,7 @@
                 "header": [
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{ adminToken }}"
+                    "value": "Bearer {{adminToken}}"
                   },
                   {
                     "key": "Content-Type",
@@ -1239,7 +1339,7 @@
                 "header": [
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{ adminToken }}"
+                    "value": "Bearer {{adminToken}}"
                   },
                   {
                     "key": "Content-Type",
@@ -1271,7 +1371,7 @@
                 "header": [
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{ adminToken }}"
+                    "value": "Bearer {{adminToken}}"
                   },
                   {
                     "key": "Content-Type",
@@ -1303,7 +1403,7 @@
                 "header": [
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{ adminToken }}"
+                    "value": "Bearer {{adminToken}}"
                   },
                   {
                     "key": "Content-Type",
@@ -1335,7 +1435,7 @@
                 "header": [
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{ adminToken }}"
+                    "value": "Bearer {{adminToken}}"
                   },
                   {
                     "key": "Content-Type",
@@ -1367,7 +1467,7 @@
                 "header": [
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{ adminToken }}"
+                    "value": "Bearer {{adminToken}}"
                   },
                   {
                     "key": "Content-Type",
@@ -1399,7 +1499,7 @@
                 "header": [
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{ adminToken }}"
+                    "value": "Bearer {{adminToken}}"
                   },
                   {
                     "key": "Content-Type",
@@ -1431,7 +1531,7 @@
                 "header": [
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{ adminToken }}"
+                    "value": "Bearer {{adminToken}}"
                   },
                   {
                     "key": "Content-Type",
@@ -1463,7 +1563,7 @@
                 "header": [
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{ adminToken }}"
+                    "value": "Bearer {{adminToken}}"
                   },
                   {
                     "key": "Content-Type",
@@ -1503,7 +1603,7 @@
                     "header": [
                       {
                         "key": "Authorization",
-                        "value": "Bearer {{ adminToken }}"
+                        "value": "Bearer {{adminToken}}"
                       },
                       {
                         "key": "Content-Type",
@@ -1540,7 +1640,7 @@
                     "header": [
                       {
                         "key": "Authorization",
-                        "value": "Bearer {{ adminToken }}"
+                        "value": "Bearer {{adminToken}}"
                       },
                       {
                         "key": "Content-Type",
@@ -1564,9 +1664,11 @@
                         "type": "text/javascript",
                         "exec": [
                           "pm.test('Status is 409', function () { pm.response.to.have.status(409); });",
-                          "let req = { url: pm.environment.get('baseUrl') + '/api/admin/coupons/' + pm.environment.get('idp001_id'), method: 'DELETE', header: { 'Authorization': 'Bearer ' + pm.environment.get('adminToken') } };",
-                          "pm.sendRequest(req, function(){});",
-                          "pm.environment.unset('idp001_id');"
+                          "if (pm.response.code === 200) {",
+                          "    let req = { url: pm.environment.get('baseUrl') + '/api/admin/coupons/' + pm.environment.get('idp001_id'), method: 'DELETE', header: { 'Authorization': 'Bearer ' + pm.environment.get('adminToken') } };",
+                          "    pm.sendRequest(req, function(){});",
+                          "pm.environment.unset('idp001_id');",
+                          "}"
                         ]
                       }
                     }
@@ -1588,7 +1690,7 @@
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer {{ adminToken }}"
+                "value": "Bearer {{adminToken}}"
               },
               {
                 "key": "Content-Type",
