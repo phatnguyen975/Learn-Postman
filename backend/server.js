@@ -633,6 +633,10 @@ app.put("/api/admin/orders/:id/status", authenticateToken, (req, res) => {
   );
 });
 
+app.get(PORT === 3000 ? "/" : "/api", (_, res) => {
+  res.send(`<h1>Welcome to EShop API</h1><p>Server is running on port ${PORT}</p><p>Swagger UI available at <a href="/api-docs">/api-docs</a></p>`);
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
