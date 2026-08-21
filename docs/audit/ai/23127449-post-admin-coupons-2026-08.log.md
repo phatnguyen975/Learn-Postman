@@ -1,20 +1,20 @@
 # AI Audit Log (FR-17) — August 2026
 
-> **Last updated:** 2026-08-21T20:48:56+07:00
+> **Last updated:** 2026-08-21T21:46:38+07:00
 
 ## Monthly Statistics
 
 - **Period:** 2026-08-01 → 2026-08-21
-- **Total Interactions:** 13
-- **Models Used:** Claude Sonnet 4.6 (Thinking) (2), Gemini 3.1 Pro (High) (11)
+- **Total Interactions:** 14
+- **Models Used:** Claude Sonnet 4.6 (Thinking) (2), Gemini 3.1 Pro (High) (12)
 
 ### Status Breakdown
 
 | Status        | Count  | %   |
 | ------------- | ------ | --- |
-| ✅ VALID      | 7      | 54% |
-| ⚠️ PARTIAL    | 1      | 8%  |
-| 🔄 REVISED    | 5      | 38% |
+| ✅ VALID      | 7      | 50% |
+| ⚠️ PARTIAL    | 1      | 7%  |
+| 🔄 REVISED    | 6      | 43% |
 | ❌ INVALID    | 0      | 0%  |
 | 🔲 INCOMPLETE | 0      | 0%  |
 | ⏳ PENDING    | 0      | 0%  |
@@ -31,8 +31,8 @@
 
 ### Quality Metrics
 
-- **Acceptance Rate** (VALID + PARTIAL / Total): 62%
-- **Revision Rate** (REVISED / Total): 38%
+- **Acceptance Rate** (VALID + PARTIAL / Total): 57%
+- **Revision Rate** (REVISED / Total): 43%
 - **Failure Rate** (INVALID + INCOMPLETE / Total): 0%
 
 ## [AI-AUDIT-001] 2026-08-21T05:42:45+07:00
@@ -411,3 +411,33 @@ Bạn đã hiểu sai ý của tôi rồi, tôi cần bạn đọc và format l�
 | -------- | ------------------------------------------------------------------------------------------------------------- |
 | Reason   | The AI correctly understood the feedback and formatted the actual results accurately in English as requested. |
 | Revision | None                                                                                                          |
+
+## [AI-AUDIT-014] 2026-08-21T21:46:38+07:00
+
+### Metadata
+
+- **Model:** Gemini 3.1 Pro (High)
+- **Tags:** `testing` · `documentation` · `report`
+- **Status:** 🔄 REVISED
+
+### Prompt
+
+```prompt
+/api-bug-report tc_file: "docs/apis/post-admin-coupons/test-cases.md"
+  contract_file: "docs/apis/post-admin-coupons/CONTRACT.md"
+  feature_id: "FR17"
+  output_dir: "docs/apis/post-admin-coupons/"
+
+Hãy tiến hành phân tích các FAIL test cases trong test-cases.md và group theo các root cause, sau đó tổng hợp thành các bug report. Lưu ý không được trình bày các nội dung dư thừa so với template của skill. Sau đó tôi sẽ kiểm tra lại.
+```
+
+### Output
+
+- `docs/apis/post-admin-coupons/bug-report.md` — Analyzed 32 FAIL test cases, grouped them by root cause, and produced a structured bug report containing 4 bug entries.
+
+### Evaluation
+
+| Field    | Detail                                                                                              |
+| -------- | --------------------------------------------------------------------------------------------------- |
+| Reason   | I need to manually review the bugs that the AI has summarized to ensure accuracy before submitting. |
+| Revision | None explicitly recorded, pending human review.                                                     |
